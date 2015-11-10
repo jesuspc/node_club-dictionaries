@@ -42,6 +42,12 @@ If not found a 404 is returned.
 
 ### Observations
 
+If the user is not logger in a 401 is returned with body:
+
+```json
+{ "error_code": "not_logged_in", "error_msg": "Not logged in" }
+```
+
 If a user is trying to access a resource that's not his a 403 is returned with body:
 
 ```json
@@ -53,3 +59,13 @@ If the scope is not "users" neither "accounts" a 400 is returned with body:
 ```json
 { "error": "scope does not have a valid value" }
 ```
+
+### Installing this Repo
+
+Run:
+
+```bash
+npm install
+```
+
+If npm fails while installing the mongo driver please follow the instructions [here](http://mongodb.github.io/node-mongodb-native/2.0/getting-started/installation-guide/). If on mac make sure you have accepted the Xcode license agreement.
