@@ -3,7 +3,7 @@ var request = require('supertest');
 
 var app = require('../../app');
 
-describe('[INTEGRATION] Create Dictionary', function(){
+describe.skip('[INTEGRATION] Create Dictionary', function(){
   beforeEach(function(){
     this.setupDb = function() {
 
@@ -51,10 +51,20 @@ describe('[INTEGRATION] Create Dictionary', function(){
 
         });
       });
+
+      describe('when there was a previous entry with the given name', function(){
+        it('overrides the previous entry', function(){
+
+        });
+      });
     });
 
     describe.skip('when unsuccessful authorization', function(){
       it('returns a 403', function(){
+
+      });
+
+      it('does not create a record', function(){
 
       });
 

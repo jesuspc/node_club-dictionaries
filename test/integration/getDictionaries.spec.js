@@ -3,7 +3,7 @@ var request = require('supertest');
 
 var app = require('../../app');
 
-describe('[INTEGRATION] Get Dictionaries', function(){
+describe.skip('[INTEGRATION] Get Dictionaries', function(){
   beforeEach(function(){
     this.setupDb = function() {
 

@@ -3,7 +3,7 @@ var request = require('supertest');
 
 var app = require('../../app');
 
-describe('[INTEGRATION] Delete Dictionary', function(){
+describe.skip('[INTEGRATION] Delete Dictionary', function(){
   beforeEach(function(){
     this.setupDb = function() {
 
@@ -47,6 +47,10 @@ describe('[INTEGRATION] Delete Dictionary', function(){
 
     describe.skip('when unsuccessful authorization', function(){
       it('returns a 403', function(){
+
+      });
+
+      it('does not remove the record', function(){
 
       });
 
