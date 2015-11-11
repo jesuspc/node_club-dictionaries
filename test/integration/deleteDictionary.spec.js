@@ -1,29 +1,11 @@
 var assert = require('assert');
-var request = require('supertest');
 
 var box = require('../box')(),
     shared = require('../support/apiShared'),
-    dbConnection = box.persistence.client(),
-    app = box.app();
+    helper = require('../support/integrationHelper');
 
 describe.skip('[INTEGRATION] Delete Dictionary', function(){
-  beforeEach(function(){
-    this.setupDb = function() {
-
-    };
-
-    this.teardownDb = function() {
-
-    };
-
-    this.doRequest = function() {
-
-    };
-  });
-
-  afterEach(function(){
-    this.teardownDb();
-  });
+  helper.include(box);
 
   describe('when user logged in', function(){
     describe('when successful authorization', function(){

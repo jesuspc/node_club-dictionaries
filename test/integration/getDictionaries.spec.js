@@ -1,59 +1,19 @@
 var assert = require('assert');
-var request = require('supertest');
-var Q = require('q');
 
 var box = require('../box')(),
     shared = require('../support/apiShared'),
-    dbConnection = box.persistence.client(),
-    app = box.app();
+    helper = require('../support/integrationHelper');
 
 describe('[INTEGRATION] Get Dictionaries', function(){
-  before(function(done){
-    this.setupDb = function() {
-      var that = this;
-      var deferred = Q.defer();
-
-      dbConnection().then(function(db){
-        db.collection('dictionaries').insertMany(that.dictionaries).then(function(res){
-          deferred.resolve();
-        });
-      });
-
-      return deferred.promise;
-    };
-
-    this.teardownDb = function(callback) {
-      dbConnection().then(function(db){
-        db.collection('dictionaries').removeMany({}, {}, callback);
-      });
-    };
-
-    this.doRequest = function(setExpectations) {
-      var that = this;
-
-      this.setupDb().then(function(){
-        var req = request(app)
-          .get('/api/v1.0/users/myUuid/dictionaries.json')
-          .set('Accept', 'application/json');
-
-        setExpectations(req);
-      });
-    };
-
-    this.teardownDb(done);
-  });
+  helper.include(box);
 
   beforeEach(function(){
+    this.getUrl = function() { return '/api/v1.0/users/myUuid/dictionaries.json'; }
     this.expectedBody = {};
-    this.dictName = 'dict1';
     this.dict1 = { "name" : "dict1", "field1" : "value1", "meta" : { "uuid" : "myUuid", "scope" : "users" } };
     this.dict2 = { "name" : "dict2", "field2" : "value2", "meta" : { "uuid" : "myUuid", "scope" : "users" } };
     this.dict3 = { "name" : "dict3", "field3" : "value3", "meta" : { "uuid" : "myUuid", "scope" : "accounts" } };
     this.dictionaries = [this.dict1, this.dict2, this.dict3];
-  });
-
-  afterEach(function(done){
-    this.teardownDb(done);
   });
 
   describe('when user logged in', function(){
