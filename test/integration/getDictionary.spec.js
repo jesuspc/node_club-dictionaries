@@ -45,8 +45,8 @@ describe('[INTEGRATION] Get Dictionary', function(){
   beforeEach(function(){
     this.expectedBody = {};
     this.dictName = 'dict1';
-    this.dict1 = { "name" : "dict1", "field1" : "value1", "meta" : { "uuid" : "myUuid" } };
-    this.dict2 = { "name" : "dict2", "field2" : "value2", "meta" : { "uuid" : "myUuid" } };
+    this.dict1 = { "name" : "dict1", "field1" : "value1", "meta" : { "uuid" : "myUuid", "scope" : "users" } };
+    this.dict2 = { "name" : "dict2", "field2" : "value2", "meta" : { "uuid" : "myUuid", "scope" : "users" } };
     this.dictionaries = [this.dict1, this.dict2];
   });
 
