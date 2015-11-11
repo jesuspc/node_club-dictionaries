@@ -21,9 +21,9 @@ describe('[INTEGRATION] Get Dictionary', function(){
       return deferred.promise;
     };
 
-    this.teardownDb = function(done) {
+    this.teardownDb = function(callback) {
       dbConnection().then(function(db){
-        db.collection('dictionaries').removeMany({}, {}, done);
+        db.collection('dictionaries').removeMany({}, {}, callback);
       });
     };
 
