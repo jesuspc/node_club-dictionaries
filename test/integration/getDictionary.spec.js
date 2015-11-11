@@ -1,5 +1,6 @@
 var assert = require('assert');
 var request = require('supertest');
+var Q = require('q');
 
 var box = require('../box')(),
     dbConnection = box.persistence.client(),
@@ -7,18 +8,21 @@ var box = require('../box')(),
 
 describe('[INTEGRATION] Get Dictionary', function(){
   before(function(done){
-    this.setupDb = function(callback) {
+    this.setupDb = function() {
       var that = this;
+      var deferred = Q.defer();
 
-      dbConnection(function(db, dbCallback){
+      dbConnection().then(function(db){
         db.collection('dictionaries').insertMany(that.dictionaries).then(function(res){
-          callback(dbCallback, db);
+          deferred.resolve();
         });
       });
+
+      return deferred.promise;
     };
 
     this.teardownDb = function(done) {
-      dbConnection(function(db, dbCallback){
+      dbConnection().then(function(db){
         db.collection('dictionaries').removeMany({}, {}, done);
       });
     };
@@ -26,7 +30,7 @@ describe('[INTEGRATION] Get Dictionary', function(){
     this.doRequest = function(setExpectations) {
       var that = this;
 
-      this.setupDb(function(){
+      this.setupDb().then(function(){
         var req = request(app)
           .get('/api/v1.0/users/myUuid/dictionaries/' + that.dictName + '.json')
           .set('Accept', 'application/json');

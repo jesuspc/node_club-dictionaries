@@ -122,16 +122,19 @@ module.exports = function(boxer, overrides) {
   boxer.set('persistence.client', function(){
     var assert = require('assert');
     var client = require('mongodb').MongoClient;
+    var Q = require('q');
     var url = 'mongodb://' + box.persistence.location() + '/' + box.persistence.database();
 
-    return function(operation) {
-      client.connect(url, function(err, db){
-        assert.equal(null, err);
+    return function() {
+      var deferred = Q.defer();
 
-        operation(db, function(){
-          db.close();
-        });
+      client.connect(url).then(function(db){
+        deferred.resolve(db);
+      }).then(function() {
+        db.close;
       });
+
+      return deferred.promise;
     };
   });
 
