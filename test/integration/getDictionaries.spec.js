@@ -3,6 +3,7 @@ var request = require('supertest');
 var Q = require('q');
 
 var box = require('../box')(),
+    shared = require('../support/apiShared'),
     dbConnection = box.persistence.client(),
     app = box.app();
 
@@ -47,7 +48,8 @@ describe('[INTEGRATION] Get Dictionaries', function(){
     this.dictName = 'dict1';
     this.dict1 = { "name" : "dict1", "field1" : "value1", "meta" : { "uuid" : "myUuid", "scope" : "users" } };
     this.dict2 = { "name" : "dict2", "field2" : "value2", "meta" : { "uuid" : "myUuid", "scope" : "users" } };
-    this.dictionaries = [this.dict1, this.dict2];
+    this.dict3 = { "name" : "dict3", "field3" : "value3", "meta" : { "uuid" : "myUuid", "scope" : "accounts" } };
+    this.dictionaries = [this.dict1, this.dict2, this.dict3];
   });
 
   afterEach(function(done){
@@ -88,23 +90,11 @@ describe('[INTEGRATION] Get Dictionaries', function(){
     });
 
     describe.skip('when unsuccessful authorization', function(){
-      it('returns a 403', function(){
-
-      });
-
-      it('returns a json message with error details', function(){
-
-      });
+      shared.respondsToNotAuthorized();
     });
   });
 
   describe.skip('when user not logger in', function(){
-    it('returns a 401', function(){
-
-    });
-
-    it('returns a json message with error details', function(){
-
-    });
+    shared.respondsToNotLoggedIn();
   });
 });

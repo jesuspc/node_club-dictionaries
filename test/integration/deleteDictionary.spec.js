@@ -1,7 +1,10 @@
 var assert = require('assert');
 var request = require('supertest');
 
-var app = require('../../app');
+var box = require('../box')(),
+    shared = require('../support/apiShared'),
+    dbConnection = box.persistence.client(),
+    app = box.app();
 
 describe.skip('[INTEGRATION] Delete Dictionary', function(){
   beforeEach(function(){
@@ -46,27 +49,15 @@ describe.skip('[INTEGRATION] Delete Dictionary', function(){
     });
 
     describe.skip('when unsuccessful authorization', function(){
-      it('returns a 403', function(){
-
-      });
+      shared.respondsToNotAuthorized();
 
       it('does not remove the record', function(){
-
-      });
-
-      it('returns a json message with error details', function(){
 
       });
     });
   });
 
   describe.skip('when user not logger in', function(){
-    it('returns a 401', function(){
-
-    });
-
-    it('returns a json message with error details', function(){
-
-    });
+    shared.respondsToNotLoggedIn();
   });
 });
