@@ -14,7 +14,8 @@
     "jade": "~1.11.0",
     "morgan": "~1.6.1",
     "serve-favicon": "~2.3.0",
-    "mongodb": "latest"
+    "mongodb": "latest",
+    "q": "latest"
   },
   "devDependencies": {
     "supertest": "latest",

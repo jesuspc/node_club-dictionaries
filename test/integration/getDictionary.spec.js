@@ -11,9 +11,8 @@ describe('[INTEGRATION] Get Dictionary', function(){
       var that = this;
 
       dbConnection(function(db, dbCallback){
-        db.collection('dictionaries').insertMany(that.dictionaries, function(err, res){
-          assert.equal(err, null);
-          callback(dbCallback, db)
+        db.collection('dictionaries').insertMany(that.dictionaries).then(function(res){
+          callback(dbCallback, db);
         });
       });
     };
