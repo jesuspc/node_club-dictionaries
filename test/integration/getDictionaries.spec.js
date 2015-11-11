@@ -18,33 +18,57 @@ describe('[INTEGRATION] Get Dictionaries', function(){
 
   describe('when user logged in', function(){
     describe('when successful authorization', function(){
-      describe('when no filters provided', function(){
+      describe('when there are records in the database matching the request params', function(){
+        describe('when no filters provided', function(){
+          it('returns a 200', function(done){
+            this.doRequest(function(req){
+              req.expect(200, done);
+            });
+          });
+
+          it('returns the expected list of dictionaries', function(done){
+            var expectedBody = [{ name: "dict1", field1: "value1" }, { name: "dict2", field2: "value2" }];
+
+            this.doRequest(function(req){
+              var correctBody = function(res) {
+                assert.deepEqual(res.body, expectedBody);
+              };
+
+              req.expect(correctBody).end(done);
+            });
+          });
+        });
+
+        describe.skip('when filters provided', function(){
+          it('returns a 200', function(){
+
+          });
+
+          it('returns the expected list of dictionaries', function(){
+
+          });
+        });
+      });
+
+      describe('when there are not records in the database matching the request params', function(){
+        beforeEach(function(){
+          this.dictionaries = [{}];
+        });
+
         it('returns a 200', function(done){
           this.doRequest(function(req){
             req.expect(200, done);
           });
         });
 
-        it('returns the expected list of dictionaries', function(done){
-          var expectedBody = [{ name: "dict1", field1: "value1" }, { name: "dict2", field2: "value2" }];
-
+        it('returns an empty collection as body', function(done){
           this.doRequest(function(req){
             var correctBody = function(res) {
-              assert.deepEqual(res.body, expectedBody);
+              assert.deepEqual(res.body, []);
             };
 
             req.expect(correctBody).end(done);
           });
-        });
-      });
-
-      describe.skip('when filters provided', function(){
-        it('returns a 200', function(){
-
-        });
-
-        it('returns the expected list of dictionaries', function(){
-
         });
       });
     });

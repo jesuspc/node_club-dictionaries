@@ -26,7 +26,7 @@ module.exports = {
         });
       };
 
-      this.doRequest = function(setExpectations) {
+      this.doRequest = function(yield) {
         var that = this;
 
         this.setupDb().then(function(){
@@ -34,7 +34,7 @@ module.exports = {
             .get(that.getUrl())
             .set('Accept', 'application/json');
 
-          setExpectations(req);
+          yield(req);
         });
       };
 
