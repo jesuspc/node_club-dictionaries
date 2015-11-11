@@ -5,7 +5,7 @@ module.exports = function(){
       return 'dictionaries_test';
     });
     overrides.set('middleware.logger', function(){
-      return function(req, res, next) { next() };
+      return function(req, res, next) { next(); };
     });
   });
 
