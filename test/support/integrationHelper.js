@@ -28,10 +28,10 @@ module.exports = {
 
       this.doRequest = function(yield) {
         var that = this;
+        that.method = that.method || 'get';
 
         this.setupDb().then(function(){
-          var req = request(app)
-            .get(that.getUrl())
+          var req = request(app)[that.method](that.getUrl())
             .set('Accept', 'application/json');
 
           yield(req);
