@@ -18,7 +18,8 @@
     "q": "latest"
   },
   "devDependencies": {
-    "supertest": "latest",
-    "mocha": "latest"
+    "mocha": "latest",
+    "sinon": "^1.17.2",
+    "supertest": "latest"
   }
 }

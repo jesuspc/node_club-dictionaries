@@ -8,7 +8,10 @@ describe('[INTEGRATION] Get Dictionaries', function(){
   helper.include(box);
 
   beforeEach(function(){
-    this.getUrl = function() { return '/api/v1.0/users/myUuid/dictionaries.json'; }
+    this.scope = 'users';
+    this.getUrl = function() {
+      return '/api/v1.0/' + this.scope + '/myUuid/dictionaries.json';
+    }
     this.expectedBody = {};
     this.dict1 = { "name" : "dict1", "field1" : "value1", "meta" : { "uuid" : "myUuid", "scope" : "users" } };
     this.dict2 = { "name" : "dict2", "field2" : "value2", "meta" : { "uuid" : "myUuid", "scope" : "users" } };
@@ -48,6 +51,39 @@ describe('[INTEGRATION] Get Dictionaries', function(){
 
           });
         });
+      });
+
+      describe('when validating scope with parameterizer', function() {
+        describe('when scope is users', function() {
+          beforeEach(function() {
+            this.scope = 'users';
+          });
+          it('allows scope users', function(done) {
+            this.doRequest(function(req) {
+              req.expect(200, done);
+            });
+          })
+        })
+        describe('when scope is accounts', function() {
+          beforeEach(function() {
+            this.scope = 'accounts';
+          });
+          it('allows scope accounts', function(done) {
+            this.doRequest(function(req) {
+              req.expect(200, done);
+            });
+          })
+        })
+        describe('when scope is not valid', function() {
+          beforeEach(function() {
+            this.scope = 'broken';
+          });
+          it('rejects scope broken', function(done) {
+            this.doRequest(function(req) {
+              req.expect(400, {'error':'scope does not have a valid value'}, done);
+            });
+          })
+        })
       });
 
       describe('when there are not records in the database matching the request params', function(){

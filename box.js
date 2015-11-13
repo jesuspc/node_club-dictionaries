@@ -69,7 +69,7 @@ module.exports = function(boxer, overrides) {
         create: box.dictionaries.transactions.create(),
         destroy: box.dictionaries.transactions.destroy()
       },
-      parametrize: box.dictionaries.api.parametrizers().default,
+      parameterize: box.dictionaries.api.parameterizer().default,
       authorize: box.middleware.authorizers().isOwner,
       serialize: box.dictionaries.serializer().base
     });
@@ -79,8 +79,9 @@ module.exports = function(boxer, overrides) {
     return require('./lib/dictionaries/serializer')();
   });
 
-  boxer.set('dictionaries.api.parametrizers', function(){
-    return require('./lib/dictionaries/api/parametrizers')();
+
+  boxer.set('dictionaries.api.parameterizer', function() {
+    return require('./lib/dictionaries/api/parameterizer')();
   });
 
   boxer.set('dictionaries.transactions.index', function(){
