@@ -1,13 +1,10 @@
 var assert = require('assert'),
     sinon = require('sinon');
 
-var parameterizer = require('../../lib/dictionaries/api/parameterizer');
-
-
+var parameterizer = require('../../../../lib/dictionaries/api/parameterizer');
 
 describe('Parameterizer', function() {
     describe('default', function() {
-
         var createMockResponse = function() {
             return {
                 send: function() {},
@@ -22,7 +19,6 @@ describe('Parameterizer', function() {
         });
 
         it('should invoke next when a users scope is passed', function() {
-
             var req = {
                 params: {
                     scope: 'users'
@@ -39,7 +35,6 @@ describe('Parameterizer', function() {
 
 
         it('should invoke next when an accounts scope is passed', function() {
-
             var req = {
                 params: {
                     scope: 'accounts'

@@ -84,8 +84,25 @@ module.exports = function(boxer, overrides) {
     return require('./lib/dictionaries/api/parameterizer')();
   });
 
+  boxer.set('httpRequest', function(){
+    return require('request');
+  });
+
+  boxer.set('cirrus.authUrl', function(){
+    return 'https://qa.workshare.com/api/v1.4/current_user.json?includes=a.core';
+  });
+
+  boxer.set('cirrus.client', function(){
+    return require('./lib/cirrusClient')({
+      authUrl: box.cirrus.authUrl(),
+      request: box.httpRequest()
+    });
+  });
+
   boxer.set('middleware.session', function() {
-    return require('./lib/middleware/session')();
+    return require('./lib/middleware/session')({
+      authenticator: box.remotes.cirrus.client()
+    });
   });
 
   boxer.set('dictionaries.transactions.index', function(){

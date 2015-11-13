@@ -52,7 +52,7 @@ module.exports = {
             uuid: this.accountUuid
           }
         }
-      }
+      };
       this.userUuid = 'myUuid';
       this.accountUuid = 'myAccountUuid';
     });
