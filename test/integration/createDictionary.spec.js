@@ -44,7 +44,7 @@ describe.skip('[INTEGRATION] Create Dictionary', function(){
       });
     });
 
-    describe.skip('when unsuccessful authorization', function(){
+    describe('when unsuccessful authorization', function(){
       shared.respondsToNotAuthorized();
 
       it('does not create a record', function(){
