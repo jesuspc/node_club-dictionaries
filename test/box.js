@@ -7,6 +7,12 @@ module.exports = function(){
     overrides.set('middleware.logger', function(){
       return function(req, res, next) { next(); };
     });
+    overrides.set('middleware.session', function(){
+      return function(req, res, next) {
+        req.currentUser = JSON.parse(req.headers.fakeuser);
+        next();
+      };
+    });
   });
 
   return box;

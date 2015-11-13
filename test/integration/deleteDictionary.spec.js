@@ -74,7 +74,7 @@ describe('[INTEGRATION] Delete Dictionary', function(){
       });
     });
 
-    describe.skip('when unsuccessful authorization', function(){
+    describe('when unsuccessful authorization', function(){
       shared.respondsToNotAuthorized();
 
       it('does not remove the record', function(){
