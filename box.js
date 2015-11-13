@@ -70,7 +70,7 @@ module.exports = function(boxer, overrides) {
         destroy: box.dictionaries.transactions.destroy()
       },
       parameterize: box.dictionaries.api.parameterizer().default,
-      authorize: box.middleware.authorizers().isOwner,
+      authorize: box.middleware.authorizers().ownerOrAccount,
       serialize: box.dictionaries.serializer().base
     });
   });
@@ -82,6 +82,10 @@ module.exports = function(boxer, overrides) {
 
   boxer.set('dictionaries.api.parameterizer', function() {
     return require('./lib/dictionaries/api/parameterizer')();
+  });
+
+  boxer.set('middleware.session', function() {
+    return require('./lib/middleware/session')();
   });
 
   boxer.set('dictionaries.transactions.index', function(){
@@ -157,7 +161,7 @@ module.exports = function(boxer, overrides) {
     app.use(box.middleware.publicFiles());
     // Session middleware should request authentication to Cirrus and
     // add current user to the request object
-    // app.use(box.middleware.session);
+    app.use(box.middleware.session());
     app.use('/api/v1.0', box.dictionaries.api.middleware());
     app.use(box.middleware.errorHandler.notFound());
 

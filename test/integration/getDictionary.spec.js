@@ -93,7 +93,18 @@ describe('[INTEGRATION] Get Dictionary', function(){
       });
 
       describe.skip('when unsuccessful authorization', function(){
-        shared.respondsToNotAuthorized();
+      //  shared.respondsToNotAuthorized();
+        it('returns a 403', function(){
+
+
+          this.doRequest(function(req){
+            req.expect(403, done);
+          });
+        });
+
+        it('returns a json message with error details', function(){
+
+        });
       });
     });
   });

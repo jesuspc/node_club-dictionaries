@@ -32,7 +32,8 @@ module.exports = {
 
         this.setupDb().then(function(){
           var req = request(app)[that.method](that.getUrl())
-            .set('Accept', 'application/json');
+            .set('Accept', 'application/json')
+            .set('FakeUser', JSON.stringify(that.getFakeUser()));
 
           yield(req);
         });
@@ -42,8 +43,19 @@ module.exports = {
     });
 
     beforeEach(function(){
+      var that = this;
       this.getUrl = function(){ return '' };
       this.dictionaries = [];
+      this.getFakeUser = function() {
+        return {
+          uuid: that.userUuid,
+          account: {
+            uuid: that.accountUuid
+          }
+        }
+      }
+      this.userUuid = 'myUuid';
+      this.accountUuid = 'myAccountUuid';
     });
 
     afterEach(function(done){
