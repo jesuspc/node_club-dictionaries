@@ -43,14 +43,13 @@ module.exports = {
     });
 
     beforeEach(function(){
-      var that = this;
       this.getUrl = function(){ return '' };
       this.dictionaries = [];
       this.getFakeUser = function() {
         return {
-          uuid: that.userUuid,
+          uuid: this.userUuid,
           account: {
-            uuid: that.accountUuid
+            uuid: this.accountUuid
           }
         }
       }
