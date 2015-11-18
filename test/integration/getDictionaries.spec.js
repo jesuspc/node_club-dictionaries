@@ -42,13 +42,30 @@ describe('[INTEGRATION] Get Dictionaries', function(){
           });
         });
 
-        describe.skip('when filters provided', function(){
-          it('returns a 200', function(){
-
+        describe.only('when filters provided', function(){
+          beforeEach(function(){
+            this.getUrl = function() {
+              return '/api/v1.0/' + this.scope + '/myUuid/dictionaries.json?filters=dict1';
+            };
           });
 
-          it('returns the expected list of dictionaries', function(){
+          it('returns a 200', function(done){
 
+            this.doRequest(function(req){
+              req.expect(200, done);
+            });            
+          });
+
+          it('returns the expected list of dictionaries', function(done){
+            var expectedBody = [ { name: "dict1", field1: "value1" } ];
+
+            this.doRequest(function(req){
+              var correctBody = function(res) {
+                assert.deepEqual(res.body, expectedBody);
+              };
+
+              req.expect(correctBody).end(done);
+            });
           });
         });
       });
