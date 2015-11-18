@@ -11,8 +11,8 @@ describe('[INTEGRATION] Create Dictionary', function(){
   helper.include(box);
 
   beforeEach(function(){
-    this.dictName = "newDict"
-    this.method = "put"
+    this.dictName = "newDict";
+    this.method = "put";
     this.getUrl = function() { return '/api/v1.0/users/myUuid/dictionaries/'+this.dictName+'.json'; }
 
     this.expectedBody = {};
@@ -43,7 +43,7 @@ describe('[INTEGRATION] Create Dictionary', function(){
           var expectedDictionary = {"name": "unnamedDict", "unnamedField" : "unnamedValue"};
 
           this.doRequest(function(req){
-            req.send(that.unnamedDict)
+            req.send(that.unnamedDict);
             req.end(function(){
               dbConnection().then(function(db){
                 db.collection('dictionaries').findOne({name: that.dictName}).then(function(dict){
@@ -64,7 +64,7 @@ describe('[INTEGRATION] Create Dictionary', function(){
           var expectedBody = { name: "unnamedDict", unnamedField: "unnamedValue" };
           var that = this;
           this.doRequest(function(req){
-            req.send(that.unnamedDict)
+            req.send(that.unnamedDict);
             var correctBody = function(res) {
               assert.deepEqual(res.body, expectedBody);
             };
@@ -121,7 +121,7 @@ describe('[INTEGRATION] Create Dictionary', function(){
           var that = this;
 
           this.doRequest(function(req){
-            req.send(that.dict1Overwrite)
+            req.send(that.dict1Overwrite);
             var correctBody = function(res) {
               assert.deepEqual(res.body, expectedBody);
             };
