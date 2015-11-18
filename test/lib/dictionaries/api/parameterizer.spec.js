@@ -4,15 +4,67 @@ var assert = require('assert'),
 var parameterizer = require('../../../../lib/dictionaries/api/parameterizer');
 
 describe('Parameterizer', function() {
-    describe('default', function() {
-        var createMockResponse = function() {
-            return {
-                send: function() {},
-                status: function() {},
-                sendStatus: function() {}
-            }
-        };
+    var createMockResponse = function() {
+        return {
+            send: function() {},
+            status: function() {},
+            sendStatus: function() {}
+        }
+    };
 
+    describe('ensureDictionaryName', function() {
+        it('should be a function', function() {
+            var p = parameterizer().ensureDictionaryName;
+            assert.equal('function', typeof p);
+        });
+
+        it('should set body.name if there is a name parameter and body is not yet named', function() {
+            var req = {
+                params: {
+                    name: 'George'
+                },
+                body:{}
+            };
+            var res = createMockResponse();
+
+            parameterizer().ensureDictionaryName(req, res, function(){});
+
+            assert.equal(req.body.name, 'George');
+        });
+
+        it('should not change body.name if there is a name parameter but body already has a name', function() {
+            var req = {
+                params: {
+                    name: 'George'
+                },
+                body:{
+                    name:'Ethel'
+                }
+            };
+            var res = createMockResponse();
+
+            parameterizer().ensureDictionaryName(req, res, function(){});
+
+            assert.equal(req.body.name, 'Ethel');
+        });
+
+        it('should call next', function() {
+            var req = {
+                params: {
+                    name: 'George'
+                },
+                body:{}
+            };
+            var spyNext = sinon.spy();
+            var res = createMockResponse();
+
+            parameterizer().ensureDictionaryName(req, res, spyNext);
+
+            assert(spyNext.calledOnce);
+        });
+
+    });
+    describe('default', function() {
         it('should be a function', function() {
             var p = parameterizer().default;
             assert.equal('function', typeof p);
@@ -25,7 +77,6 @@ describe('Parameterizer', function() {
                 }
             };
             var res = createMockResponse();
-
             var spyNext = sinon.spy();
 
             parameterizer().default(req, res, spyNext);
@@ -41,7 +92,6 @@ describe('Parameterizer', function() {
                 }
             };
             var res = createMockResponse();
-
             var spyNext = sinon.spy();
 
             parameterizer().default(req, res, spyNext);
@@ -55,11 +105,9 @@ describe('Parameterizer', function() {
                     scope: 'badgers'
                 }
             };
-
             var res = createMockResponse();
             var spySend = sinon.spy(res, 'send');
             var spyStatus = sinon.spy(res, 'status');
-
             var spyNext = sinon.spy();
 
             parameterizer().default(req, res, spyNext);
