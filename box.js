@@ -66,7 +66,7 @@ module.exports = function(boxer, overrides) {
       transactions: {
         index: box.dictionaries.transactions.index(),
         show: box.dictionaries.transactions.show(),
-        create: box.dictionaries.transactions.create(),
+        upsert: box.dictionaries.transactions.upsert(),
         destroy: box.dictionaries.transactions.destroy()
       },
       parameterize: box.dictionaries.api.parameterizer().default,
@@ -102,8 +102,8 @@ module.exports = function(boxer, overrides) {
     });
   });
 
-  boxer.set('dictionaries.transactions.create', function(){
-    var transaction = require('./lib/dictionaries/transactions/create');
+  boxer.set('dictionaries.transactions.upsert', function(){
+    var transaction = require('./lib/dictionaries/transactions/upsert');
     return transaction({
       dbConnection: box.persistence.client()
     });
