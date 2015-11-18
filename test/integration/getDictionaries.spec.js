@@ -42,7 +42,7 @@ describe('[INTEGRATION] Get Dictionaries', function(){
           });
         });
 
-        describe.only('when filters provided', function(){
+        describe('when filters provided', function(){
           beforeEach(function(){
             this.getUrl = function() {
               return '/api/v1.0/' + this.scope + '/myUuid/dictionaries.json?filters=dict1';
@@ -50,7 +50,6 @@ describe('[INTEGRATION] Get Dictionaries', function(){
           });
 
           it('returns a 200', function(done){
-
             this.doRequest(function(req){
               req.expect(200, done);
             });            
