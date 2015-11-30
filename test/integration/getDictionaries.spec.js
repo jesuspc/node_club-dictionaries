@@ -16,7 +16,8 @@ describe('[INTEGRATION] Get Dictionaries', function(){
     this.dict1 = { "name" : "dict1", "field1" : "value1", "meta" : { "uuid" : "myUuid", "scope" : "users" } };
     this.dict2 = { "name" : "dict2", "field2" : "value2", "meta" : { "uuid" : "myUuid", "scope" : "users" } };
     this.dict3 = { "name" : "dict3", "field3" : "value3", "meta" : { "uuid" : "myUuid", "scope" : "accounts" } };
-    this.dictionaries = [this.dict1, this.dict2, this.dict3];
+    this.withFilters = { "name" : "withFilters", "field1" : "value1", "field2" : "value2", "meta" : { "uuid" : "myUuid", "scope" : "users" } };
+    this.dictionaries = [this.dict1, this.dict2, this.dict3, this.withFilters];
   });
 
   describe('when user logged in', function(){
@@ -30,7 +31,7 @@ describe('[INTEGRATION] Get Dictionaries', function(){
           });
 
           it('returns the expected list of dictionaries', function(done){
-            var expectedBody = [{ name: "dict1", field1: "value1" }, { name: "dict2", field2: "value2" }];
+            var expectedBody = [{ name: "dict1", field1: "value1" }, { name: "dict2", field2: "value2" }, { "name" : "withFilters", "field1" : "value1", "field2" : "value2"}];
 
             this.doRequest(function(req){
               var correctBody = function(res) {
@@ -42,10 +43,24 @@ describe('[INTEGRATION] Get Dictionaries', function(){
           });
         });
 
-        describe('when filters provided', function(){
+        describe('when filter provided with no key', function(){
           beforeEach(function(){
             this.getUrl = function() {
               return '/api/v1.0/' + this.scope + '/myUuid/dictionaries.json?filters=dict1';
+            };
+          });
+
+          it('returns a 500', function(done){
+            this.doRequest(function(req){
+              req.expect(500, done);
+            });            
+          });
+        });
+
+        describe('when filters provided with keys', function(){
+          beforeEach(function(){
+            this.getUrl = function() {
+              return '/api/v1.0/' + this.scope + '/myUuid/dictionaries.json?filters[field1]=value1&filters[field2]=value2';
             };
           });
 
@@ -56,7 +71,7 @@ describe('[INTEGRATION] Get Dictionaries', function(){
           });
 
           it('returns the expected list of dictionaries', function(done){
-            var expectedBody = [ { name: "dict1", field1: "value1" } ];
+            var expectedBody = [ { name: "withFilters", field1: "value1", field2: "value2" } ];
 
             this.doRequest(function(req){
               var correctBody = function(res) {
