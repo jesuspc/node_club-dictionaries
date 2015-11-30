@@ -101,7 +101,7 @@ module.exports = function(boxer, overrides) {
 
   boxer.set('middleware.session', function() {
     return require('./lib/middleware/session')({
-      authenticator: box.remotes.cirrus.client()
+      authenticator: box.cirrus.client()
     });
   });
 

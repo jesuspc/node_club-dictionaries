@@ -1,4 +1,6 @@
-## Dictionaries Microservice
+# Dictionaries Microservice
+
+## The current production API
 
 ### Visiting the swagger
 
@@ -60,7 +62,7 @@ If the scope is not "users" neither "accounts" a 400 is returned with body:
 { "error": "scope does not have a valid value" }
 ```
 
-### Installing this Repo
+## Installing this Repo
 
 Run:
 
@@ -69,3 +71,20 @@ npm install
 ```
 
 If npm fails while installing the mongo driver please follow the instructions [here](http://mongodb.github.io/node-mongodb-native/2.0/getting-started/installation-guide/). If on mac make sure you have accepted the Xcode license agreement.
+
+### Wireing thing in local environments
+
+Session cookies comming from Cirrus are marked as secure and scoped in the .workshare.com domain.
+Therefore, in order to have them accessible from the browser both ssl and being in the same
+domain are mandatory.
+
+For that reason if you are developing in a local machine you may want to teak your /etc/hosts file by adding something like:
+
+```bash
+127.0.0.1 localhost.workshare.com
+```
+
+Also a fake ssl certificate has to be set up in the public directory that would mock
+the one that is expected to be present in production.
+
+Access the API using that host instead and ignore the warning about security.

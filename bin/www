@@ -18,8 +18,17 @@ app.set('port', port);
 /**
  * Create HTTP server.
  */
+var https = require('https');
+var fs = require('fs');
 
-var server = http.createServer(app);
+var options = {
+    key: fs.readFileSync('./public/server.key'),
+    cert: fs.readFileSync('./public/server.crt'),
+    requestCert: false,
+    rejectUnauthorized: false
+};
+
+var server = https.createServer(options, app);
 
 /**
  * Listen on provided port, on all network interfaces.
