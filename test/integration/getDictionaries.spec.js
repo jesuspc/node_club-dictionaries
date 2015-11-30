@@ -50,9 +50,9 @@ describe('[INTEGRATION] Get Dictionaries', function(){
             };
           });
 
-          it('returns a 500', function(done){
+          it('it is considered a bad request and returns a 400', function(done){
             this.doRequest(function(req){
-              req.expect(500, done);
+              req.expect(400, done);
             });            
           });
         });
