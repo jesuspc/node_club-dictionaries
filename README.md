@@ -72,7 +72,7 @@ npm install
 
 If npm fails while installing the mongo driver please follow the instructions [here](http://mongodb.github.io/node-mongodb-native/2.0/getting-started/installation-guide/). If on mac make sure you have accepted the Xcode license agreement.
 
-### Wireing thing in local environments
+### Wiring thing in local environments
 
 Session cookies comming from Cirrus are marked as secure and scoped in the .workshare.com domain.
 Therefore, in order to have them accessible from the browser both ssl and being in the same
