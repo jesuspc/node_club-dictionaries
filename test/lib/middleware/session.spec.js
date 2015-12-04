@@ -48,11 +48,10 @@ describe('Session', function(){
             this.setup();
         });
 
-        it('calls next and sets the current user in the req', function(done){
+        it('calls next and sets the current user in the req', function(){
             var req = this.req;
             this.next = function(){
                 assert.equal(req.currentUser, 'userData');
-                done();
             };
 
             return this.session(this.req, this.res, this.next);
@@ -74,14 +73,13 @@ describe('Session', function(){
             return this.session(this.req, this.res, this.next);
         });
 
-        it('responds with body', function(done){
+        it('responds with body', function(){
             var resJsonSpy = sinon.spy(this.res, 'json')
             this.res.end = function(){
                 error_json = {
                     "error_code": "not_logged_in", "error_msg": "Not logged in"
                 }
                 assert(resJsonSpy.withArgs(error_json).calledOnce);
-                done();
             };
 
             return this.session(this.req, this.res, this.next);
