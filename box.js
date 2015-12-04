@@ -70,6 +70,7 @@ module.exports = function(boxer, overrides) {
         destroy: box.dictionaries.transactions.destroy()
       },
       parameterize: box.dictionaries.api.parameterizer().default,
+      ensureDictionaryName: box.dictionaries.api.parameterizer().ensureDictionaryName,
       authorize: box.middleware.authorizers().ownerOrAccount,
       serialize: box.dictionaries.serializer().base
     });
