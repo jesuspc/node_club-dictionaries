@@ -119,4 +119,10 @@ describe('Parameterizer', function() {
             assert(!spyNext.called);
         });
     });
+    describe('ensureCorrectFilterFormat', function() {
+        it('should be a function', function() {
+            var filterFunction = parameterizer().ensureCorrectFilterFormat;
+            assert.equal('function', typeof filterFunction);
+        });
+    });
 });
