@@ -53,7 +53,7 @@ describe('[INTEGRATION] Get Dictionaries', function(){
           it('it is considered a bad request and returns a 400', function(done){
             this.doRequest(function(req){
               req.expect(400, done);
-            });            
+            });
           });
         });
 
@@ -67,7 +67,7 @@ describe('[INTEGRATION] Get Dictionaries', function(){
           it('returns a 200', function(done){
             this.doRequest(function(req){
               req.expect(200, done);
-            });            
+            });
           });
 
           it('returns the expected list of dictionaries', function(done){
