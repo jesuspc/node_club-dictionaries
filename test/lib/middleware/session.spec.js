@@ -48,13 +48,20 @@ describe('Session', function(){
             this.setup();
         });
 
-        it('calls next and sets the current user in the req', function(){
+        it('calls sets the current user in the req', function(){
             var req = this.req;
-            this.next = function(){
-                assert.equal(req.currentUser, 'userData');
-            };
 
-            return this.session(this.req, this.res, this.next);
+            return this.session(req, this.res, this.next).finally(function(){
+                assert.equal(req.currentUser, 'userData');
+            });
+        });
+
+        it('calls next', function(){
+            var next = sinon.spy();
+
+            return this.session(this.req, this.res, next).finally(function(){
+                assert(next.called);
+            });
         });
     });
 
@@ -66,23 +73,24 @@ describe('Session', function(){
 
         it('responds with status unauthorized', function(){
             var resStatusSpy = sinon.spy(this.res, 'status');
-            this.res.end = function(){
-                assert(resStatusSpy.withArgs(401).calledOnce);
-            };
 
-            return this.session(this.req, this.res, this.next);
+            return this.session(this.req, this.res, this.next)
+                .finally(function(){
+                    assert(resStatusSpy.withArgs(401).calledOnce);
+                });
         });
 
         it('responds with body', function(){
             var resJsonSpy = sinon.spy(this.res, 'json')
-            this.res.end = function(){
-                error_json = {
-                    "error_code": "not_logged_in", "error_msg": "Not logged in"
-                }
-                assert(resJsonSpy.withArgs(error_json).calledOnce);
-            };
 
-            return this.session(this.req, this.res, this.next);
+            return this.session(this.req, this.res, this.next)
+                .finally(function(){
+                    error_json = {
+                        "error_code": "not_logged_in",
+                        "error_msg": "Not logged in"
+                    }
+                    assert(resJsonSpy.withArgs(error_json).calledOnce);
+                });
         });
     });
 });
