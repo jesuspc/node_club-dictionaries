@@ -124,5 +124,37 @@ describe('Parameterizer', function() {
             var filterFunction = parameterizer().ensureCorrectFilterFormat;
             assert.equal('function', typeof filterFunction);
         });
+        it('should create a empty object if no filters are sent', function(){
+            var req = {
+                query: {}
+            };
+
+            var res = createMockResponse();
+            var spySendStatus = sinon.spy(res, 'sendStatus');
+            var spyNext = sinon.spy();
+
+            parameterizer().ensureCorrectFilterFormat(req, res, spyNext);
+
+            assert(req.query.hasOwnProperty('filters'))
+            assert(!spySendStatus.called);
+            assert.deepEqual(req.query.filters, {})
+            assert(spyNext.called);
+        });
+        it('should send 400 if the filter recieved is not an object', function(){
+            var req = {
+                query: {filters: 'blorpblorp'}
+            };
+
+            var res = createMockResponse();
+            var spySendStatus = sinon.spy(res, 'sendStatus');
+            var spyNext = sinon.spy();
+
+            parameterizer().ensureCorrectFilterFormat(req, res, spyNext);
+
+            assert(spySendStatus.calledOnce);
+            assert(spySendStatus.calledWithExactly(400));
+            assert(!spyNext.called);
+        });
     });
+
 });
