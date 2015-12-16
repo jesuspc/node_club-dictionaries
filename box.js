@@ -71,6 +71,7 @@ module.exports = function(boxer, overrides) {
       },
       parameterize: box.dictionaries.api.parameterizer().default,
       ensureDictionaryName: box.dictionaries.api.parameterizer().ensureDictionaryName,
+      ensureCorrectFilterFormat: box.dictionaries.api.parameterizer().ensureCorrectFilterFormat,
       authorize: box.middleware.authorizers().ownerOrAccount,
       serialize: box.dictionaries.serializer().base
     });
