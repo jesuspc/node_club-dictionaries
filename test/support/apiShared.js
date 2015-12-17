@@ -2,10 +2,6 @@ var assert = require('assert');
 
 module.exports = {
   respondsToNotAuthorized: function(){
-    beforeEach(function(){
-      this.userUuid = 'unexisting';
-    });
-
     it('returns a 403', function(done){
       this.doRequest(function(req){
         req.expect(403, done);
@@ -34,12 +30,22 @@ module.exports = {
   },
 
   respondsToNotLoggedIn: function(){
-    it('returns a 401', function(){
-
+    it.skip('returns a 401', function(){
+      this.doRequest(function(req){
+        req.expect(401, done);
+      });
     });
 
-    it('returns a json message with error details', function(){
+    it.skip('returns a json message with error details', function(){
+      var expectedBody = { "error_code": "not_logged_in", "error_msg": "Not logged in" };
 
+      this.doRequest(function(req){
+        var correctBody = function(res) {
+          assert.deepEqual(res.body, expectedBody);
+        };
+
+        req.expect(correctBody).end(done);
+      });
     });
   }
 };

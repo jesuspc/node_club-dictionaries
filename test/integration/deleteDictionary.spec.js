@@ -6,10 +6,8 @@ var box = require('../box')(),
 
 var dbConnection = box.persistence.client();
 
-
 describe('[INTEGRATION] Delete Dictionary', function(){
   helper.include(box);
-
 
   beforeEach(function(){
     this.dictName = "dict1";
@@ -22,7 +20,6 @@ describe('[INTEGRATION] Delete Dictionary', function(){
     this.dict3 = { "name" : "dict3", "field3" : "value3", "meta" : { "uuid" : "myUuid", "scope" : "accounts" } };
     this.dictionaries = [this.dict1, this.dict2, this.dict3];
   });
-
 
   describe('when user logged in', function(){
     describe('when successful authorization', function(){
@@ -49,7 +46,7 @@ describe('[INTEGRATION] Delete Dictionary', function(){
               });
             });
           });
-       });
+        });
 
         it('returns the removed element as json', function(done){
           var expectedBody = { name: "dict1", field1: "value1" };
@@ -74,10 +71,30 @@ describe('[INTEGRATION] Delete Dictionary', function(){
     });
 
     describe('when unsuccessful authorization', function(){
+      beforeEach(function(){
+        this.userUuid = 'someone_else';
+      });
+
       shared.respondsToNotAuthorized();
 
       it('does not remove the record', function(){
+        var that = this;
 
+        this.doRequest(function(req){
+          req.end(function(){
+            dbConnection().then(function(db){
+              db.collection('dictionaries').findOne({name: that.dictName})
+                .then(function(dict){
+                  try{
+                    assert(dict);
+                    done();
+                  } catch(err) {
+                    done(err);
+                  }
+                });
+            });
+          });
+        });
       });
     });
   });

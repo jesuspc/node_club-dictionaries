@@ -141,6 +141,10 @@ describe('[INTEGRATION] Get Dictionaries', function(){
     });
 
     describe('when unsuccessful authorization', function(){
+      beforeEach(function(){
+        this.userUuid = 'someone_else';
+      });
+
       shared.respondsToNotAuthorized();
     });
   });

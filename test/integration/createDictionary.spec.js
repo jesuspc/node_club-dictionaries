@@ -4,7 +4,6 @@ var box = require('../box')(),
     shared = require('../support/apiShared'),
     helper = require('../support/integrationHelper');
 
-
 var dbConnection = box.persistence.client();
 
 describe('[INTEGRATION] Create Dictionary', function(){
@@ -21,7 +20,6 @@ describe('[INTEGRATION] Create Dictionary', function(){
     this.unnamedDict = {"unnamedField" : "unnamedValue", "meta" : { "uuid" : "myUuid", "scope" : "accounts" } };
     this.dictionaries = [this.dict1];
   });
-
 
   describe('when user logged in', function(){
     describe('when successful authorization', function(){
@@ -133,10 +131,30 @@ describe('[INTEGRATION] Create Dictionary', function(){
     });
 
     describe('when unsuccessful authorization', function(){
+      beforeEach(function(){
+        this.userUuid = 'someone_else';
+      });
+
       shared.respondsToNotAuthorized();
 
-      it('does not create a record', function(){
+      it('does not create a record', function(done){
+        var that = this;
 
+        this.doRequest(function(req){
+          req.end(function(){
+            dbConnection().then(function(db){
+              db.collection('dictionaries').findOne({name: that.dictName})
+                .then(function(dict){
+                  try{
+                    assert(!dict);
+                    done();
+                  } catch(err) {
+                    done(err);
+                  }
+                });
+            });
+          });
+        });
       });
     });
   });

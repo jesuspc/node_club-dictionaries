@@ -89,6 +89,10 @@ describe('[INTEGRATION] Get Dictionary', function(){
       });
 
       describe('when unsuccessful authorization', function(){
+        beforeEach(function(){
+          this.userUuid = 'someone_else';
+        });
+
         shared.respondsToNotAuthorized();
       });
     });
