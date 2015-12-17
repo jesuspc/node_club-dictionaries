@@ -11,11 +11,17 @@ describe('Parameterizer', function() {
             sendStatus: function() {}
         }
     };
+    beforeEach(function(){
+        this.parameterizer = parameterizer();
+    });
 
-    describe('ensureDictionaryName', function() {
+    describe('nameInBody', function() {
+        beforeEach(function(){
+            this.nameInBody = this.parameterizer.nameInBody
+        });
+
         it('should be a function', function() {
-            var p = parameterizer().ensureDictionaryName;
-            assert.equal('function', typeof p);
+            assert.equal('function', typeof this.nameInBody);
         });
 
         it('should set body.name if there is a name parameter and body is not yet named', function() {
@@ -27,7 +33,7 @@ describe('Parameterizer', function() {
             };
             var res = createMockResponse();
 
-            parameterizer().ensureDictionaryName(req, res, function(){});
+            this.nameInBody(req, res, function(){});
 
             assert.equal(req.body.name, 'George');
         });
@@ -43,7 +49,7 @@ describe('Parameterizer', function() {
             };
             var res = createMockResponse();
 
-            parameterizer().ensureDictionaryName(req, res, function(){});
+            this.nameInBody(req, res, function(){});
 
             assert.equal(req.body.name, 'Ethel');
         });
@@ -58,16 +64,19 @@ describe('Parameterizer', function() {
             var spyNext = sinon.spy();
             var res = createMockResponse();
 
-            parameterizer().ensureDictionaryName(req, res, spyNext);
+            this.nameInBody(req, res, spyNext);
 
             assert(spyNext.calledOnce);
         });
 
     });
     describe('default', function() {
+        beforeEach(function(){
+            this.default = this.parameterizer.default;
+        });
+
         it('should be a function', function() {
-            var p = parameterizer().default;
-            assert.equal('function', typeof p);
+            assert.equal('function', typeof this.default);
         });
 
         it('should invoke next when a users scope is passed', function() {
@@ -79,7 +88,7 @@ describe('Parameterizer', function() {
             var res = createMockResponse();
             var spyNext = sinon.spy();
 
-            parameterizer().default(req, res, spyNext);
+            this.default(req, res, spyNext);
 
             assert(spyNext.calledOnce);
         });
@@ -94,7 +103,7 @@ describe('Parameterizer', function() {
             var res = createMockResponse();
             var spyNext = sinon.spy();
 
-            parameterizer().default(req, res, spyNext);
+            this.default(req, res, spyNext);
 
             assert(spyNext.calledOnce);
         });
@@ -110,7 +119,7 @@ describe('Parameterizer', function() {
             var spyStatus = sinon.spy(res, 'status');
             var spyNext = sinon.spy();
 
-            parameterizer().default(req, res, spyNext);
+            this.default(req, res, spyNext);
 
             assert(spyStatus.calledOnce);
             assert(spyStatus.calledWithExactly(400));
@@ -119,10 +128,13 @@ describe('Parameterizer', function() {
             assert(!spyNext.called);
         });
     });
-    describe('ensureCorrectFilterFormat', function() {
+    describe('filterFormat', function() {
+        beforeEach(function(){
+            this.filterFormat = this.parameterizer.filterFormat;
+        });
+
         it('should be a function', function() {
-            var filterFunction = parameterizer().ensureCorrectFilterFormat;
-            assert.equal('function', typeof filterFunction);
+            assert.equal('function', typeof this.filterFormat);
         });
         it('should create a empty object if no filters are sent', function(){
             var req = {
@@ -133,7 +145,7 @@ describe('Parameterizer', function() {
             var spySendStatus = sinon.spy(res, 'sendStatus');
             var spyNext = sinon.spy();
 
-            parameterizer().ensureCorrectFilterFormat(req, res, spyNext);
+            this.filterFormat(req, res, spyNext);
 
             assert(req.query.hasOwnProperty('filters'))
             assert(!spySendStatus.called);
@@ -149,7 +161,7 @@ describe('Parameterizer', function() {
             var spySendStatus = sinon.spy(res, 'sendStatus');
             var spyNext = sinon.spy();
 
-            parameterizer().ensureCorrectFilterFormat(req, res, spyNext);
+            this.filterFormat(req, res, spyNext);
 
             assert(spySendStatus.calledOnce);
             assert(spySendStatus.calledWithExactly(400));

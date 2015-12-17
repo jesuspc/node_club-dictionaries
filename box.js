@@ -69,9 +69,7 @@ module.exports = function(boxer, overrides) {
         upsert: box.dictionaries.transactions.upsert(),
         destroy: box.dictionaries.transactions.destroy()
       },
-      parameterize: box.dictionaries.api.parameterizer().default,
-      ensureDictionaryName: box.dictionaries.api.parameterizer().ensureDictionaryName,
-      ensureCorrectFilterFormat: box.dictionaries.api.parameterizer().ensureCorrectFilterFormat,
+      parameterizer: box.dictionaries.api.parameterizer(),
       authorize: box.middleware.authorizers().ownerOrAccount,
       serialize: box.dictionaries.serializer().base
     });
