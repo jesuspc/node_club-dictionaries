@@ -65,12 +65,11 @@ describe('[INTEGRATION] Delete Dictionary', function(){
       });
 
       describe('when the given record does not exist', function(){
-        it('returns a 404', function(done){
+        beforeEach(function(){
           this.dictName = 'nonExistingDict';
-          this.doRequest(function(req){
-            req.expect(404, done);
-          });
         });
+
+        shared.returnsNotFound();
       });
     });
 

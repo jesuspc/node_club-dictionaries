@@ -27,11 +27,7 @@ describe('[INTEGRATION] Get Dictionary', function(){
         this.dictName = 'Unexisting';
       });
 
-      it('returns a 404', function(done){
-        this.doRequest(function(req){
-          req.expect(404, done);
-        });
-      });
+      shared.returnsNotFound();
     });
 
     describe('when validating scope with parameterizer', function() {

@@ -25,6 +25,14 @@ module.exports = {
     });
   },
 
+  returnsNotFound: function(){
+    it('returns a 404', function(done){
+      this.doRequest(function(req){
+        req.expect(404, done);
+      });
+    });
+  },
+
   respondsToNotLoggedIn: function(){
     it('returns a 401', function(){
 
