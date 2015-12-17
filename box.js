@@ -59,6 +59,17 @@ module.exports = function(boxer, overrides) {
     return require('./lib/middleware/authorizers')();
   });
 
+  boxer.set('middleware.healthcheck', function(){
+    var api = require('./lib/middleware/healthcheck');
+    return api({
+      router: box.router(),
+      dependencies: {
+        databaseClient: box.persistence.client(),
+        cirrusClient: box.cirrus.client()
+      }
+    });
+  });
+
   boxer.set('dictionaries.api.middleware', function(){
     var api = require('./lib/dictionaries/api');
     return api({
@@ -88,13 +99,22 @@ module.exports = function(boxer, overrides) {
     return require('request');
   });
 
+  boxer.set('cirrus.baseUrl', function(){
+    return 'https://qa.workshare.com';
+  });
+
   boxer.set('cirrus.authUrl', function(){
-    return 'https://qa.workshare.com/api/v1.4/current_user.json?includes=a.core';
+    return box.cirrus.baseUrl() + '/api/v1.4/current_user.json?includes=a.core';
+  });
+
+  boxer.set('cirrus.isAliveUrl', function(){
+    return box.cirrus.baseUrl() + '/is_alive';
   });
 
   boxer.set('cirrus.client', function(){
     return require('./lib/cirrusClient')({
       authUrl: box.cirrus.authUrl(),
+      isAliveUrl: box.cirrus.isAliveUrl(),
       request: box.httpRequest()
     });
   });
@@ -108,28 +128,28 @@ module.exports = function(boxer, overrides) {
   boxer.set('dictionaries.transactions.index', function(){
     var transaction = require('./lib/dictionaries/transactions/index');
     return transaction({
-      dbConnection: box.persistence.client()
+      dbConnection: box.persistence.dbConnection()
     });
   });
 
   boxer.set('dictionaries.transactions.show', function(){
     var transaction = require('./lib/dictionaries/transactions/show');
     return transaction({
-      dbConnection: box.persistence.client()
+      dbConnection: box.persistence.dbConnection()
     });
   });
 
   boxer.set('dictionaries.transactions.upsert', function(){
     var transaction = require('./lib/dictionaries/transactions/upsert');
     return transaction({
-      dbConnection: box.persistence.client()
+      dbConnection: box.persistence.dbConnection()
     });
   });
 
   boxer.set('dictionaries.transactions.destroy', function(){
     var transaction = require('./lib/dictionaries/transactions/destroy');
     return transaction({
-      dbConnection: box.persistence.client()
+      dbConnection: box.persistence.dbConnection()
     });
   });
 
@@ -141,22 +161,25 @@ module.exports = function(boxer, overrides) {
     return 'localhost:27017';
   });
 
+  boxer.set('persistence.mongo.client', function(){
+    return require('mongodb').MongoClient;
+  });
+
+  boxer.set('persistence.mongo.url', function(){
+    return 'mongodb://' + box.persistence.location() + '/' + box.persistence.database();
+  });
+
   boxer.set('persistence.client', function(){
-    var client = require('mongodb').MongoClient;
     var Q = require('q');
-    var url = 'mongodb://' + box.persistence.location() + '/' + box.persistence.database();
+    return require('./lib/dbClient')({
+      client: box.persistence.mongo.client(),
+      url: box.persistence.mongo.url()
+    });
 
-    return function() {
-      var deferred = Q.defer();
+  });
 
-      client.connect(url).then(function(db){
-        deferred.resolve(db);
-      }).then(function() {
-        db.close();
-      });
-
-      return deferred.promise;
-    };
+  boxer.set('persistence.dbConnection', function(){
+    return box.persistence.client().connection;
   });
 
   boxer.set('router', function(){
@@ -179,6 +202,7 @@ module.exports = function(boxer, overrides) {
     // Session middleware should request authentication to Cirrus and
     // add current user to the request object
     app.use(box.middleware.session());
+    app.use('/admin', box.middleware.healthcheck());
     app.use('/api/v1.0', box.dictionaries.api.middleware());
     app.use(box.middleware.errorHandler.notFound());
 

@@ -4,7 +4,7 @@ var box = require('../box')(),
     shared = require('../support/apiShared'),
     helper = require('../support/integrationHelper');
 
-var dbConnection = box.persistence.client();
+var dbConnection = box.persistence.dbConnection();
 
 describe('[INTEGRATION] Create Dictionary', function(){
   helper.include(box);
