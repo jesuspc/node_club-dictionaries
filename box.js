@@ -152,7 +152,7 @@ module.exports = function(boxer, overrides) {
       client.connect(url).then(function(db){
         deferred.resolve(db);
       }).then(function() {
-        db.close;
+        db.close();
       });
 
       return deferred.promise;

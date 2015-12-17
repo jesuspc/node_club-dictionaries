@@ -26,7 +26,7 @@ module.exports = {
         });
       };
 
-      this.doRequest = function(yield) {
+      this.doRequest = function(yielded) {
         var that = this;
         that.method = that.method || 'get';
 
@@ -35,7 +35,7 @@ module.exports = {
             .set('Accept', 'application/json')
             .set('FakeUser', JSON.stringify(that.getFakeUser()));
 
-          yield(req);
+          yielded(req);
         });
       };
 
@@ -43,7 +43,7 @@ module.exports = {
     });
 
     beforeEach(function(){
-      this.getUrl = function(){ return '' };
+      this.getUrl = function() { return ''; };
       this.dictionaries = [];
       this.getFakeUser = function() {
         return {
@@ -51,7 +51,7 @@ module.exports = {
           account: {
             uuid: this.accountUuid
           }
-        }
+        };
       };
       this.userUuid = 'myUuid';
       this.accountUuid = 'myAccountUuid';

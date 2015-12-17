@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
+    "lint": "jshint --exclude ./node_modules .",
     "test": "mocha --recursive"
   },
   "dependencies": {
@@ -19,6 +20,7 @@
     "request": "latest"
   },
   "devDependencies": {
+    "jshint": "^2.9.1-rc1",
     "mocha": "latest",
     "sinon": "^1.17.2",
     "supertest": "latest"

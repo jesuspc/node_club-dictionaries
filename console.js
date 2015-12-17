@@ -8,4 +8,4 @@ r = repl.start("tokens> ");
 r.context.box = box;
 r.context.$ = function(inspectable) {
   console.log('' + inspectable);
-}
+};

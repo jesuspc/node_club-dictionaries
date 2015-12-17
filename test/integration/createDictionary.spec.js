@@ -13,7 +13,7 @@ describe('[INTEGRATION] Create Dictionary', function(){
   beforeEach(function(){
     this.dictName = "newDict";
     this.method = "put";
-    this.getUrl = function() { return '/api/v1.0/users/myUuid/dictionaries/'+this.dictName+'.json'; }
+    this.getUrl = function() { return '/api/v1.0/users/myUuid/dictionaries/'+this.dictName+'.json'; };
 
     this.expectedBody = {};
     this.dict1 = { "name" : "dict1", "field1" : "value1", "meta" : { "uuid" : "myUuid", "scope" : "users" } };
@@ -28,14 +28,14 @@ describe('[INTEGRATION] Create Dictionary', function(){
       describe('when dictionary provided', function(){
         beforeEach(function(){
           this.dictName = 'unnamedDict';
-        })
+        });
 
         it('returns a 200', function(done){
           var that = this;
             this.doRequest(function(req){
               req.send(that.unnamedDict);
               req.expect(200, done);
-            })
+            });
         });
 
         it('creates a record with by merging the given name and the dictionary', function(done){
@@ -68,7 +68,7 @@ describe('[INTEGRATION] Create Dictionary', function(){
             var correctBody = function(res) {
               assert.deepEqual(res.body, expectedBody);
             };
-            
+
             req.expect(correctBody).end(done);
           });
         });

@@ -24,7 +24,7 @@ describe('cirrusClient', function(){
             var that = this;
             opts = opts || {};
 
-            if(opts.mockRequest) { this.mockRequest() }
+            if(opts.mockRequest) { this.mockRequest(); }
 
             this.authUrl = 'blah';
 
@@ -47,7 +47,7 @@ describe('cirrusClient', function(){
                 });
 
                 assert(requestSpy.withArgs(expectedRequestArgs).calledOnce);
-            }
+            };
             this.setup();
 
             return this.cirrusClient.getCurrentUser('some_cookies');

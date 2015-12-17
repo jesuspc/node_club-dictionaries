@@ -12,9 +12,9 @@ describe('[INTEGRATION] Delete Dictionary', function(){
 
 
   beforeEach(function(){
-    this.dictName = "dict1"
-    this.method = "delete"
-    this.getUrl = function() { return '/api/v1.0/users/myUuid/dictionaries/'+this.dictName+'.json'; }
+    this.dictName = "dict1";
+    this.method = "delete";
+    this.getUrl = function() { return '/api/v1.0/users/myUuid/dictionaries/'+this.dictName+'.json'; };
 
     this.expectedBody = {};
     this.dict1 = { "name" : "dict1", "field1" : "value1", "meta" : { "uuid" : "myUuid", "scope" : "users" } };
@@ -30,7 +30,7 @@ describe('[INTEGRATION] Delete Dictionary', function(){
         it('returns a 200', function(done){
             this.doRequest(function(req){
               req.expect(200, done);
-            })
+            });
         });
 
         it('removes the record', function(done){

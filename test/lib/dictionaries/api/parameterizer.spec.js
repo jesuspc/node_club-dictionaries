@@ -9,7 +9,7 @@ describe('Parameterizer', function() {
             send: function() {},
             status: function() {},
             sendStatus: function() {}
-        }
+        };
     };
     beforeEach(function(){
         this.parameterizer = parameterizer();
@@ -17,7 +17,7 @@ describe('Parameterizer', function() {
 
     describe('nameInBody', function() {
         beforeEach(function(){
-            this.nameInBody = this.parameterizer.nameInBody
+            this.nameInBody = this.parameterizer.nameInBody;
         });
 
         it('should be a function', function() {
@@ -147,9 +147,9 @@ describe('Parameterizer', function() {
 
             this.filterFormat(req, res, spyNext);
 
-            assert(req.query.hasOwnProperty('filters'))
+            assert(req.query.hasOwnProperty('filters'));
             assert(!spySendStatus.called);
-            assert.deepEqual(req.query.filters, {})
+            assert.deepEqual(req.query.filters, {});
             assert(spyNext.called);
         });
         it('should send 400 if the filter recieved is not an object', function(){

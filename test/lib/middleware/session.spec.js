@@ -11,9 +11,9 @@ describe('Session', function(){
             this.next = this.next || function(){};
             this.req = { headers: { cookie: 'someCookie' } };
             this.res = {
-                status: function() { return this },
-                json: function() { return this },
-                end: function() { return this }
+                status: function() { return this; },
+                json: function() { return this; },
+                end: function() { return this; }
             };
             this.resStatusSpy = sinon.spy(this.res.status);
             this.resJsonSpy = sinon.spy(this.res.json);
@@ -81,14 +81,14 @@ describe('Session', function(){
         });
 
         it('responds with body', function(){
-            var resJsonSpy = sinon.spy(this.res, 'json')
+            var resJsonSpy = sinon.spy(this.res, 'json');
 
             return this.session(this.req, this.res, this.next)
                 .finally(function(){
                     error_json = {
                         "error_code": "not_logged_in",
                         "error_msg": "Not logged in"
-                    }
+                    };
                     assert(resJsonSpy.withArgs(error_json).calledOnce);
                 });
         });
