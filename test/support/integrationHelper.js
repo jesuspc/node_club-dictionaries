@@ -3,7 +3,7 @@ var Q = require('q');
 
 module.exports = {
   include: function(box){
-    var dbConnection = box.persistence.client(),
+    var dbConnection = box.persistence.dbConnection(),
         app = box.app();
 
     before(function(done){
