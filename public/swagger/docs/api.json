@@ -1,0 +1,15 @@
+{
+  "apiVersion": "v1.0",
+  "swaggerVersion": "1.2",
+  "produces": [
+    "application/json"
+  ],
+  "operations": [],
+  "apis": [
+    {
+      "path": "/swagger/docs/v1.0/dictionaries.{format}"
+    }
+  ],
+  "info": {},
+  "basePath": "https://mylocalhost.workshare.com:3000"
+}

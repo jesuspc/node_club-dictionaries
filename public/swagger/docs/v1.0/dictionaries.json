@@ -1,0 +1,158 @@
+{
+  "apiVersion": "v1.0",
+  "swaggerVersion": "1.2",
+  "resourcePath": "",
+  "apis": [
+    {
+      "path": "/api/v1.0/{scope}/{uuid}/dictionaries.{format}",
+      "operations": [
+        {
+          "produces": [
+            "application/json"
+          ],
+          "notes": "",
+          "summary": "Get all the dictionaries for a given scope.",
+          "nickname": "GET-api--version--scope--uuid-dictionaries---format-",
+          "httpMethod": "GET",
+          "parameters": [
+            {
+              "paramType": "path",
+              "name": "scope",
+              "description": "Can be: 'users' or 'accounts'",
+              "type": "String",
+              "dataType": "String",
+              "required": true
+            },
+            {
+              "paramType": "path",
+              "name": "uuid",
+              "description": "User UUID or Account UUID or 'current'",
+              "type": "String",
+              "dataType": "String",
+              "required": true
+            },
+            {
+              "paramType": "query",
+              "name": "filters",
+              "description": "Filters to apply (optional). Example: filters[folder_id]=123",
+              "type": "String",
+              "dataType": "String",
+              "required": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/api/v1.0/{scope}/{uuid}/dictionaries/{name}.{format}",
+      "operations": [
+        {
+          "produces": [
+            "application/json"
+          ],
+          "notes": "",
+          "summary": "Get the content of a specific dictionary.",
+          "nickname": "GET-api--version--scope--uuid-dictionaries--name---format-",
+          "httpMethod": "GET",
+          "parameters": [
+            {
+              "paramType": "path",
+              "name": "scope",
+              "description": "Can be: 'users' or 'accounts'",
+              "type": "String",
+              "dataType": "String",
+              "required": true
+            },
+            {
+              "paramType": "path",
+              "name": "uuid",
+              "description": "User UUID or Account UUID or 'current'",
+              "type": "String",
+              "dataType": "String",
+              "required": true
+            },
+            {
+              "paramType": "path",
+              "name": "name",
+              "description": "Dictionary name.",
+              "type": "String",
+              "dataType": "String",
+              "required": true
+            }
+          ]
+        },
+        {
+          "produces": [
+            "application/json"
+          ],
+          "notes": "",
+          "summary": "Creates or updates a dictionary. Body payload is a Hashmap.",
+          "nickname": "PUT-api--version--scope--uuid-dictionaries--name---format-",
+          "httpMethod": "PUT",
+          "parameters": [
+            {
+              "paramType": "path",
+              "name": "scope",
+              "description": "Can be: 'users' or 'accounts'",
+              "type": "String",
+              "dataType": "String",
+              "required": true
+            },
+            {
+              "paramType": "path",
+              "name": "uuid",
+              "description": "User UUID or Account UUID or 'current'",
+              "type": "String",
+              "dataType": "String",
+              "required": true
+            },
+            {
+              "paramType": "path",
+              "name": "name",
+              "description": "Dictionary name.",
+              "type": "String",
+              "dataType": "String",
+              "required": true
+            }
+          ]
+        },
+        {
+          "produces": [
+            "application/json"
+          ],
+          "notes": "",
+          "summary": "Deletes a dictionary returning it.",
+          "nickname": "DELETE-api--version--scope--uuid-dictionaries--name---format-",
+          "httpMethod": "DELETE",
+          "parameters": [
+            {
+              "paramType": "path",
+              "name": "scope",
+              "description": "Can be: 'users' or 'accounts'",
+              "type": "String",
+              "dataType": "String",
+              "required": true
+            },
+            {
+              "paramType": "path",
+              "name": "uuid",
+              "description": "User UUID or Account UUID or 'current'",
+              "type": "String",
+              "dataType": "String",
+              "required": true
+            },
+            {
+              "paramType": "path",
+              "name": "name",
+              "description": "Dictionary name.",
+              "type": "String",
+              "dataType": "String",
+              "required": true
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "basePath": "https://dev4.workshare.com/dictionaries"
+}

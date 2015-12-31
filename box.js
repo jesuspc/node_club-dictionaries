@@ -191,6 +191,11 @@ module.exports = function(boxer, overrides) {
     return express.Router();
   });
 
+  boxer.set('middleware.swaggerUi', function(){
+    var express = require('express');
+    return express.static('public/swagger');
+  });
+
   boxer.set('app', function(){
     var path = require('path'),
         app  = require('express')();
@@ -203,10 +208,9 @@ module.exports = function(boxer, overrides) {
     app.use(box.middleware.bodyParser.urlEncoded());
     app.use(box.middleware.cookieParser());
     app.use(box.middleware.publicFiles());
-    // Session middleware should request authentication to Cirrus and
-    // add current user to the request object
     app.use(box.middleware.session());
     app.use('/admin', box.middleware.healthcheck());
+    app.use('/swagger', box.middleware.swaggerUi());
     app.use('/api/v1.0', box.dictionaries.api.middleware());
     app.use(box.middleware.errorHandler.notFound());
 
