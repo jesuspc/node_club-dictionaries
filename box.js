@@ -103,8 +103,12 @@ module.exports = function(boxer, overrides) {
     return 'https://qa.workshare.com';
   });
 
+  boxer.set('cirrus.authPath', function(){
+    return '/api/v1.4/current_user.json?includes=a.core';
+  });
+
   boxer.set('cirrus.authUrl', function(){
-    return box.cirrus.baseUrl() + '/api/v1.4/current_user.json?includes=a.core';
+    return box.cirrus.baseUrl() + box.cirrus.authPath();
   });
 
   boxer.set('cirrus.isAliveUrl', function(){

@@ -22,83 +22,94 @@ describe('[INTEGRATION] Get Dictionary', function(){
   });
 
   describe('when user logged in', function(){
-    describe('when the provided dictionary does not exists', function(){
+    describe('when successful authorization', function(){
       beforeEach(function(){
-        this.dictName = 'Unexisting';
+        this.mockCirrusAuth();
       });
 
-      shared.returnsNotFound();
+      describe('when the provided dictionary does not exists', function(){
+        beforeEach(function(){
+          this.dictName = 'Unexisting';
+        });
+
+        shared.returnsNotFound();
+      });
+
+      describe('when validating scope with parameterizer', function() {
+        describe('when scope is users', function() {
+          beforeEach(function() {
+            this.scope = 'users';
+          });
+          it('allows scope users', function(done) {
+            this.doRequest(function(req) {
+              req.expect(200, done);
+            });
+          });
+        });
+        describe('when scope is accounts', function() {
+          beforeEach(function() {
+            this.scope = 'accounts';
+          });
+          it('allows scope accounts', function(done) {
+            this.doRequest(function(req) {
+              req.expect(200, done);
+            });
+          });
+        });
+        describe('when scope is not valid', function() {
+          beforeEach(function() {
+            this.scope = 'broken';
+          });
+          it('rejects scope broken', function(done) {
+            this.doRequest(function(req) {
+              req.expect(400, {'error':'scope does not have a valid value'}, done);
+            });
+          });
+        });
+      });
+
+      describe('when the provided dictionary exists', function(){
+        describe('when successful authorization', function(){
+          beforeEach(function(){
+            this.dictName = 'dict1';
+          });
+
+          it('returns a 200', function(done){
+            this.doRequest(function(req){
+              req.expect(200, done);
+            });
+          });
+
+          it('returns the expected dictionary', function(done){
+            var expectedBody = { name: "dict1", field1: "value1" };
+
+            this.doRequest(function(req){
+              var correctBody = function(res) {
+                assert.deepEqual(res.body, expectedBody);
+              };
+
+              req.expect(correctBody).end(done);
+            });
+          });
+        });
+      });
     });
 
-    describe('when validating scope with parameterizer', function() {
-      describe('when scope is users', function() {
-        beforeEach(function() {
-          this.scope = 'users';
-        });
-        it('allows scope users', function(done) {
-          this.doRequest(function(req) {
-            req.expect(200, done);
-          });
-        });
-      });
-      describe('when scope is accounts', function() {
-        beforeEach(function() {
-          this.scope = 'accounts';
-        });
-        it('allows scope accounts', function(done) {
-          this.doRequest(function(req) {
-            req.expect(200, done);
-          });
-        });
-      });
-      describe('when scope is not valid', function() {
-        beforeEach(function() {
-          this.scope = 'broken';
-        });
-        it('rejects scope broken', function(done) {
-          this.doRequest(function(req) {
-            req.expect(400, {'error':'scope does not have a valid value'}, done);
-          });
-        });
-      });
-    });
-
-    describe('when the provided dictionary exists', function(){
-      describe('when successful authorization', function(){
-        beforeEach(function(){
-          this.dictName = 'dict1';
-        });
-
-        it('returns a 200', function(done){
-          this.doRequest(function(req){
-            req.expect(200, done);
-          });
-        });
-
-        it('returns the expected dictionary', function(done){
-          var expectedBody = { name: "dict1", field1: "value1" };
-
-          this.doRequest(function(req){
-            var correctBody = function(res) {
-              assert.deepEqual(res.body, expectedBody);
-            };
-
-            req.expect(correctBody).end(done);
-          });
-        });
+    describe('when unsuccessful authorization', function(){
+      beforeEach(function(){
+        this.userUuid = 'someone_else';
+        this.mockCirrusAuth();
       });
 
-      describe('when unsuccessful authorization', function(){
-        beforeEach(function(){
-          this.userUuid = 'someone_else';
-        });
-
-        shared.respondsToNotAuthorized();
-      });
+      shared.respondsToNotAuthorized();
     });
   });
 
-  describe.skip('when user not logger in', function(){
+  describe('when user not logger in', function(){
+    beforeEach(function(){
+      this.mockCirrusAuth({replyStatusCode: 401, replyBody: {}});
+    });
+
     shared.respondsToNotLoggedIn();
   });
 });

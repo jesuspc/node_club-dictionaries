@@ -30,13 +30,13 @@ module.exports = {
   },
 
   respondsToNotLoggedIn: function(){
-    it.skip('returns a 401', function(){
+    it('returns a 401', function(done){
       this.doRequest(function(req){
         req.expect(401, done);
       });
     });
 
-    it.skip('returns a json message with error details', function(){
+    it('returns a json message with error details', function(done){
       var expectedBody = { "error_code": "not_logged_in", "error_msg": "Not logged in" };
 
       this.doRequest(function(req){

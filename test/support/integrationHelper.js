@@ -1,4 +1,5 @@
 var request = require('supertest');
+var nock = require('nock');
 var Q = require('q');
 
 module.exports = {
@@ -55,6 +56,16 @@ module.exports = {
       };
       this.userUuid = 'myUuid';
       this.accountUuid = 'myAccountUuid';
+
+      this.mockCirrusAuth = function(opts) {
+        opts = opts || {};
+        var defaultReplyBody = this.getFakeUser();
+        var replyStatusCode = opts.replyStatusCode || 200;
+        var replyBody = opts.replyBody || defaultReplyBody;
+
+        nock(box.cirrus.baseUrl()).get(box.cirrus.authPath())
+          .reply(replyStatusCode, replyBody);
+      };
     });
 
     afterEach(function(done){

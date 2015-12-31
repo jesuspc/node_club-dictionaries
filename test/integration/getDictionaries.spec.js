@@ -22,6 +22,10 @@ describe('[INTEGRATION] Get Dictionaries', function(){
 
   describe('when user logged in', function(){
     describe('when successful authorization', function(){
+      beforeEach(function(){
+        this.mockCirrusAuth();
+      });
+
       describe('when there are records in the database matching the request params', function(){
         describe('when no filters provided', function(){
           it('returns a 200', function(done){
@@ -143,13 +147,18 @@ describe('[INTEGRATION] Get Dictionaries', function(){
     describe('when unsuccessful authorization', function(){
       beforeEach(function(){
         this.userUuid = 'someone_else';
+        this.mockCirrusAuth();
       });
 
       shared.respondsToNotAuthorized();
     });
   });
 
-  describe.skip('when user not logger in', function(){
+  describe('when user not logger in', function(){
+    beforeEach(function(){
+      this.mockCirrusAuth({replyStatusCode: 401, replyBody: {}});
+    });
+
     shared.respondsToNotLoggedIn();
   });
 });

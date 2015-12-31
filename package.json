@@ -23,6 +23,7 @@
     "jshint": "^2.9.1-rc1",
     "mocha": "latest",
     "sinon": "^1.17.2",
-    "supertest": "latest"
+    "supertest": "latest",
+    "nock": "latest"
   }
 }
