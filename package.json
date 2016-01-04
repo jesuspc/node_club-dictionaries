@@ -5,7 +5,8 @@
   "scripts": {
     "start": "node ./bin/www",
     "lint": "jshint .",
-    "test": "mocha --recursive"
+    "test": "mocha --recursive",
+    "cov": "istanbul cover _mocha -- --recursive"
   },
   "dependencies": {
     "body-parser": "~1.13.2",
@@ -17,7 +18,8 @@
     "serve-favicon": "~2.3.0",
     "mongodb": "latest",
     "q": "latest",
-    "request": "latest"
+    "request": "latest",
+    "istanbul": "latest"
   },
   "devDependencies": {
     "jshint": "^2.9.1-rc1",
