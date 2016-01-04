@@ -6,6 +6,19 @@ module.exports = function(boxer, overrides) {
   require('./lib/cirrus/box')(boxer);
   require('./lib/dictionaries/box')(boxer);
 
+  boxer.set('config', function(){
+    var fs = require('fs');
+    var filePath;
+
+    if(fs.existsSync('./config/application.json')) {
+      filePath = './config/application.json';
+    } else {
+      filePath = './config/application-sample.json';
+    };
+
+    return JSON.parse(fs.readFileSync(filePath, 'utf8'));
+  });
+
   boxer.set('httpRequest', function(){
     return require('request');
   });

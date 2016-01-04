@@ -1,0 +1,13 @@
+{
+  "cirrus" : {
+    "baseUrl" : "https://qa.workshare.com",
+    "paths" : {
+      "auth" : "/api/v1.4/current_user.json?includes=a.core",
+      "isAlive" : "/is_alive"
+    }
+  },
+  "persistence" : {
+    "location" : "localhost:27017",
+    "database" : "dictionaries"
+  }
+}
