@@ -56,7 +56,7 @@ module.exports = function(boxer, overrides) {
   });
 
   boxer.set('middleware.authorizers', function(){
-    return require('./lib/middleware/authorizers')();
+    return require('./lib/middleware/authorizer');
   });
 
   boxer.set('middleware.healthcheck', function(){
@@ -72,6 +72,13 @@ module.exports = function(boxer, overrides) {
 
   boxer.set('dictionaries.api.middleware', function(){
     var api = require('./lib/dictionaries/api');
+    var isOwner = function(req) {
+      return req.currentUser.uuid === req.params.uuid;
+    };
+    var inAccount = function(req) {
+      return req.currentUser.account.uuid === req.params.uuid;
+    };
+
     return api({
       router: box.router(),
       transactions: {
@@ -81,7 +88,9 @@ module.exports = function(boxer, overrides) {
         destroy: box.dictionaries.transactions.destroy()
       },
       parameterizer: box.dictionaries.api.parameterizer(),
-      authorize: box.middleware.authorizers().ownerOrAccount,
+      authorize: box.middleware.authorizers()({
+        conditions: [isOwner, inAccount]
+      }),
       serialize: box.dictionaries.serializer().base
     });
   });
