@@ -41,7 +41,7 @@ module.exports = function(boxer, overrides) {
     app.use(box.middleware.cookieParser());
     app.use(box.middleware.publicFiles());
     app.use(box.middleware.session());
-    app.use('/admin', box.middleware.healthcheck());
+    app.use('/admin/healthcheck', box.middleware.healthcheck());
     app.use('/swagger', box.middleware.swaggerUi());
     app.use('/api/v1.0', box.dictionaries.api.middleware());
     app.use(box.middleware.errorHandler.notFound());

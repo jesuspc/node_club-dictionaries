@@ -3,35 +3,26 @@ var assert = require('assert'),
     sinon = require('sinon');
 
 
-var fakeRouter = {
-    get: function(url, callback) {
-        this.getHealthcheck = callback;
-    }
-};
-
 var mongoHealthy = true,
     cirrusHealthy = true;
 
 var healthcheck = require('../../../lib/middleware/healthcheck')({
-    router: fakeRouter,
-    dependencies: {
-        databaseClient: {
-            isHealthy: function(){
-                var deferred = Q.defer();
-                deferred.resolve({
-                    healthy: mongoHealthy
-                });
-                return deferred.promise;
-            }
-        },
-        cirrusClient: {
-            isHealthy: function(){
-                var deferred = Q.defer();
-                deferred.resolve({
-                    healthy: cirrusHealthy
-                });
-                return deferred.promise;
-            }
+    databaseClient: {
+        isHealthy: function(){
+            var deferred = Q.defer();
+            deferred.resolve({
+                healthy: mongoHealthy
+            });
+            return deferred.promise;
+        }
+    },
+    cirrusClient: {
+        isHealthy: function(){
+            var deferred = Q.defer();
+            deferred.resolve({
+                healthy: cirrusHealthy
+            });
+            return deferred.promise;
         }
     }
 });
@@ -55,7 +46,7 @@ describe('Healthcheck', function() {
 
 
 
-            healthcheck.getHealthcheck({}, fakeRes);
+            healthcheck({}, fakeRes);
         });
 
         it('returns mongo is down and 500', function(done) {
@@ -71,7 +62,7 @@ describe('Healthcheck', function() {
                 done();
             };
 
-            healthcheck.getHealthcheck({}, fakeRes);
+            healthcheck({}, fakeRes);
         });
 
         it('returns cirrus is down and 500', function() {
@@ -88,7 +79,7 @@ describe('Healthcheck', function() {
             };
 
 
-            healthcheck.getHealthcheck({}, fakeRes);
+            healthcheck({}, fakeRes);
         });
 
     });
