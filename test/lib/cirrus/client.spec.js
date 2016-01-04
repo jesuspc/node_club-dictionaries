@@ -1,7 +1,7 @@
 var Q = require('q');
 var assert = require('assert');
 var sinon = require('sinon');
-var builder = require('../../lib/cirrusClient');
+var builder = require('../../../lib/cirrus/client');
 
 describe('cirrusClient', function(){
     beforeEach(function(){

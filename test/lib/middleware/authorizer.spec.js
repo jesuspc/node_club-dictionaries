@@ -20,7 +20,7 @@ describe('Authorizer', function(){
         this.doAction = function(){
             this.setAuthorizers();
             this.getSubject()(this.req, this.res, this.next);
-        }
+        };
 
         this.setAuthorizers = function() {
             this.conditions = [];
@@ -28,7 +28,7 @@ describe('Authorizer', function(){
     });
 
     describe('when no conditions provided', function(){
-        beforeEach(function() { this.conditions = null });
+        beforeEach(function() { this.conditions = null; });
 
         it('returns 403', function(){
             var resStatusSpy = sinon.spy(this.res, 'status');
@@ -45,7 +45,7 @@ describe('Authorizer', function(){
     describe('when conditions provided', function(){
         beforeEach(function() {
             this.setAuthorizers = function(){
-                this.conditions = [this.condition1, this.condition2]
+                this.conditions = [this.condition1, this.condition2];
             };
         });
 
