@@ -86,4 +86,34 @@ describe('cirrusClient', function(){
             });
         });
     });
+
+    describe('Health check', function(){
+        it('returns that is healthy when the client is alive', function(done) {
+            this.request = function(opts, callback) {
+                callback(null, {
+                    statusCode: 200
+                });
+            };
+            this.setup();
+
+            this.cirrusClient.isHealthy().then(function(healthCheck){
+                assert.equal(healthCheck.healthy, true);
+                done();
+            });
+        });
+
+        it('returns that is not healthy and an error message when client is dead', function(done){
+            this.request = function(opts, callback) {
+                callback(null, {
+                    statusCode: 500
+                });
+            };
+            this.setup();
+
+            this.cirrusClient.isHealthy().then(function(healthCheck){
+                assert.equal(healthCheck.healthy, false);
+                done();
+            });
+        });
+    })
 });
