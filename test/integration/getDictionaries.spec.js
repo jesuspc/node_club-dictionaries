@@ -13,10 +13,21 @@ describe('[INTEGRATION] Get Dictionaries', function(){
       return '/api/v1.0/' + this.scope + '/myUuid/dictionaries.json';
     };
     this.expectedBody = {};
-    this.dict1 = { "name" : "dict1", "field1" : "value1", "meta" : { "uuid" : "myUuid", "scope" : "users" } };
-    this.dict2 = { "name" : "dict2", "field2" : "value2", "meta" : { "uuid" : "myUuid", "scope" : "users" } };
-    this.dict3 = { "name" : "dict3", "field3" : "value3", "meta" : { "uuid" : "myUuid", "scope" : "accounts" } };
-    this.withFilters = { "name" : "withFilters", "field1" : "value1", "field2" : "value2", "meta" : { "uuid" : "myUuid", "scope" : "users" } };
+    this.dict1 = { "name" : "dict1", "field1" : "value1", "meta" : {
+      "uuid" : "myUuid", "scope" : "users" }
+    };
+    this.dict2 = { "name" : "dict2", "field2" : "value2", "meta" : {
+      "uuid" : "myUuid", "scope" : "users" }
+    };
+    this.dict3 = { "name" : "dict3", "field3" : "value3", "meta" : {
+      "uuid" : "myUuid", "scope" : "accounts" }
+    };
+    this.withFilters = {
+      "name" : "withFilters",
+      "field1" : "value1",
+      "field2" : "value2",
+      "meta" : { "uuid" : "myUuid", "scope" : "users" }
+    };
     this.dictionaries = [this.dict1, this.dict2, this.dict3, this.withFilters];
   });
 
@@ -26,7 +37,7 @@ describe('[INTEGRATION] Get Dictionaries', function(){
         this.mockCirrusAuth();
       });
 
-      describe('when there are records in the database matching the request params', function(){
+      describe('when records in the db matching the req params', function(){
         describe('when no filters provided', function(){
           it('returns a 200', function(done){
             this.doRequest(function(req){
@@ -35,7 +46,10 @@ describe('[INTEGRATION] Get Dictionaries', function(){
           });
 
           it('returns the expected list of dictionaries', function(done){
-            var expectedBody = [{ name: "dict1", field1: "value1" }, { name: "dict2", field2: "value2" }, { "name" : "withFilters", "field1" : "value1", "field2" : "value2"}];
+            var expectedBody = [
+              { name: "dict1", field1: "value1" },
+              { name: "dict2", field2: "value2" },
+              { name: "withFilters", field1: "value1", field2: "value2"}];
 
             this.doRequest(function(req){
               var correctBody = function(res) {
@@ -50,7 +64,8 @@ describe('[INTEGRATION] Get Dictionaries', function(){
         describe('when filter provided with no key', function(){
           beforeEach(function(){
             this.getUrl = function() {
-              return '/api/v1.0/' + this.scope + '/myUuid/dictionaries.json?filters=dict1';
+              return '/api/v1.0/'+this.scope+
+                '/myUuid/dictionaries.json?filters=dict1';
             };
           });
 
@@ -64,7 +79,9 @@ describe('[INTEGRATION] Get Dictionaries', function(){
         describe('when filters provided with keys', function(){
           beforeEach(function(){
             this.getUrl = function() {
-              return '/api/v1.0/' + this.scope + '/myUuid/dictionaries.json?filters[field1]=value1&filters[field2]=value2';
+              return '/api/v1.0/'+this.scope+
+                '/myUuid/dictionaries.json?filters[field1]=value1&filters'+
+                '[field2]=value2';
             };
           });
 
@@ -75,7 +92,9 @@ describe('[INTEGRATION] Get Dictionaries', function(){
           });
 
           it('returns the expected list of dictionaries', function(done){
-            var expectedBody = [ { name: "withFilters", field1: "value1", field2: "value2" } ];
+            var expectedBody = [{
+              name: "withFilters", field1: "value1", field2: "value2"
+            }];
 
             this.doRequest(function(req){
               var correctBody = function(res) {
@@ -115,13 +134,15 @@ describe('[INTEGRATION] Get Dictionaries', function(){
           });
           it('rejects scope broken', function(done) {
             this.doRequest(function(req) {
-              req.expect(400, {'error':'scope does not have a valid value'}, done);
+              req.expect(
+                400, {'error':'scope does not have a valid value'}, done
+              );
             });
           });
         });
       });
 
-      describe('when there are not records in the database matching the request params', function(){
+      describe('when no records in the db matching the req param', function(){
         beforeEach(function(){
           this.dictionaries = [{}];
         });

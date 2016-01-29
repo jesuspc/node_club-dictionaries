@@ -12,12 +12,21 @@ describe('[INTEGRATION] Get Dictionary', function(){
     this.dictName = 'dict1';
     this.scope = 'users';
     this.getUrl = function(){
-      return '/api/v1.0/' + this.scope + '/myUuid/dictionaries/' + this.dictName + '.json';
+      return '/api/v1.0/'+this.scope+'/myUuid/dictionaries/'+
+        this.dictName+'.json';
     };
-    this.dict1 = { "name" : "dict1", "field1" : "value1", "meta" : { "uuid" : "myUuid", "scope" : "users" } };
-    this.dict2 = { "name" : "dict2", "field2" : "value2", "meta" : { "uuid" : "myUuid", "scope" : "users" } };
-    this.dict3 = { "name" : "dict1", "field1" : "value1", "meta" : { "uuid" : "myUuid", "scope" : "accounts" } };
-    this.dict4 = { "name" : "dict2", "field2" : "value2", "meta" : { "uuid" : "myUuid", "scope" : "accounts" } };
+    this.dict1 = { "name" : "dict1", "field1" : "value1", "meta" : {
+      "uuid" : "myUuid", "scope" : "users" }
+    };
+    this.dict2 = { "name" : "dict2", "field2" : "value2", "meta" : {
+      "uuid" : "myUuid", "scope" : "users" }
+    };
+    this.dict3 = { "name" : "dict1", "field1" : "value1", "meta" : {
+      "uuid" : "myUuid", "scope" : "accounts" }
+    };
+    this.dict4 = { "name" : "dict2", "field2" : "value2", "meta" : {
+      "uuid" : "myUuid", "scope" : "accounts" }
+    };
     this.dictionaries = [this.dict1, this.dict2, this.dict3, this.dict4];
   });
 
@@ -62,7 +71,9 @@ describe('[INTEGRATION] Get Dictionary', function(){
           });
           it('rejects scope broken', function(done) {
             this.doRequest(function(req) {
-              req.expect(400, {'error':'scope does not have a valid value'}, done);
+              req.expect(
+                400, {'error':'scope does not have a valid value'}, done
+              );
             });
           });
         });

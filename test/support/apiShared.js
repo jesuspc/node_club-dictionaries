@@ -9,7 +9,10 @@ module.exports = {
     });
 
     it('returns a json message with error details', function(done){
-      var expectedBody = { "error_code": "forbidden", "error_msg": "You are not allowed to access this scope" };
+      var expectedBody = {
+        "error_code": "forbidden",
+        "error_msg": "You are not allowed to access this scope"
+      };
 
       this.doRequest(function(req){
         var correctBody = function(res) {
@@ -37,7 +40,10 @@ module.exports = {
     });
 
     it('returns a json message with error details', function(done){
-      var expectedBody = { "error_code": "not_logged_in", "error_msg": "Not logged in" };
+      var expectedBody = {
+        "error_code": "not_logged_in",
+        "error_msg": "Not logged in"
+      };
 
       this.doRequest(function(req){
         var correctBody = function(res) {

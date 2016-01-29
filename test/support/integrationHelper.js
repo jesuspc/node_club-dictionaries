@@ -13,9 +13,10 @@ module.exports = {
         var deferred = Q.defer();
 
         dbConnection().then(function(db){
-          db.collection('dictionaries').insertMany(that.dictionaries).then(function(res){
-            deferred.resolve();
-          });
+          db.collection('dictionaries').insertMany(that.dictionaries)
+            .then(function(res){
+              deferred.resolve();
+            });
         });
 
         return deferred.promise;

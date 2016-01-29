@@ -24,7 +24,7 @@ describe('Parameterizer', function() {
             assert.equal('function', typeof this.nameInBody);
         });
 
-        it('should set body.name if there is a name parameter and body is not yet named', function() {
+        it('should set body.name if name param and body not named', function() {
             var req = {
                 params: {
                     name: 'George'
@@ -38,7 +38,7 @@ describe('Parameterizer', function() {
             assert.equal(req.body.name, 'George');
         });
 
-        it('should not change body.name if there is a name parameter but body already has a name', function() {
+        it('should not change body.name if name param but body has name', function() {
             var req = {
                 params: {
                     name: 'George'
@@ -108,7 +108,7 @@ describe('Parameterizer', function() {
             assert(spyNext.calledOnce);
         });
 
-        it('should invoke send 400 with an error response for an invalid scope', function() {
+        it('should send 400 with error for an invalid scope', function() {
             var req = {
                 params: {
                     scope: 'badgers'
@@ -124,7 +124,9 @@ describe('Parameterizer', function() {
             assert(spyStatus.calledOnce);
             assert(spyStatus.calledWithExactly(400));
             assert(spySend.calledOnce);
-            assert(spySend.calledWithExactly({'error':'scope does not have a valid value'}));
+            assert(spySend.calledWithExactly({
+                'error':'scope does not have a valid value'
+            }));
             assert(!spyNext.called);
         });
     });
@@ -152,7 +154,7 @@ describe('Parameterizer', function() {
             assert.deepEqual(req.query.filters, {});
             assert(spyNext.called);
         });
-        it('should send 400 if the filter recieved is not an object', function(){
+        it('should send 400 if the filter recieved is not an obj', function(){
             var req = {
                 query: {filters: 'blorpblorp'}
             };
