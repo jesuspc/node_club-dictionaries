@@ -27,8 +27,13 @@ describe('cirrusClient', function(){
             if(opts.mockRequest) { this.mockRequest(); }
 
             this.authUrl = 'blah';
+            this.logger = { info: function(){}, debug: function(){} };
 
-            this.cirrusClient = builder({request: this.request, authUrl: this.authUrl});
+            this.cirrusClient = builder({
+                request: this.request,
+                authUrl: this.authUrl,
+                logger: this.logger
+            });
         };
     });
 

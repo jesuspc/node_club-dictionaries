@@ -9,5 +9,8 @@
   "persistence" : {
     "location" : "localhost:27017",
     "database" : "dictionaries"
+  },
+  "loggers" : {
+    "config" : "config/loggers-sample.json"
   }
 }

@@ -38,7 +38,11 @@ describe('Session', function(){
                 }
             };
 
-            this.session = session({authenticator: this.authenticator});
+            this.logger = { info: function(){}, debug: function(){} };
+            this.session = session({
+                authenticator: this.authenticator,
+                logger: this.logger
+            });
         };
     });
 

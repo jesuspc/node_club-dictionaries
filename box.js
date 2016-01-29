@@ -14,9 +14,16 @@ module.exports = function(boxer, overrides) {
       filePath = './config/application.json';
     } else {
       filePath = './config/application-sample.json';
-    };
+    }
 
     return JSON.parse(fs.readFileSync(filePath, 'utf8'));
+  });
+
+  boxer.set('loggerFactory', function(){
+    var log4js = require('log4js');
+    log4js.configure(box.config().loggers.config, {});
+
+    return log4js;
   });
 
   boxer.set('httpRequest', function(){

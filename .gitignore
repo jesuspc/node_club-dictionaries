@@ -5,3 +5,4 @@ npm-debug.log
 public/server.crt
 public/server.key
 coverage/
+log/*
