@@ -129,6 +129,22 @@ describe('Parameterizer', function() {
             }));
             assert(!spyNext.called);
         });
+
+        it('should change the string current in the params uuid to the logged user uuid', function(){
+            var req = {
+                params: {
+                    uuid: 'current'
+                },
+                currentUser: {
+                    uuid: 'fake-user-uuid'
+                }
+            };
+            var res = createMockResponse();
+
+            this.default(req, res, function(){});
+
+            assert.deepEqual(req.params.uuid, 'fake-user-uuid');
+        });
     });
     describe('filterFormat', function() {
         beforeEach(function(){
