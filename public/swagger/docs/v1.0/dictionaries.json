@@ -113,6 +113,13 @@
               "type": "String",
               "dataType": "String",
               "required": true
+            },
+            {
+              "name": "body",
+              "description": "Data stored in the dictionary",
+              "required": false,
+              "type": "String",
+              "paramType": "body"
             }
           ]
         },
@@ -154,5 +161,5 @@
       ]
     }
   ],
-  "basePath": "https://dev4.workshare.com/dictionaries"
+  "basePath": "https://mylocalhost.workshare.com:3000"
 }
