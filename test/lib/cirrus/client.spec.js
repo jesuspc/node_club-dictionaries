@@ -115,5 +115,5 @@ describe('cirrusClient', function(){
                 done();
             });
         });
-    })
+    });
 });
