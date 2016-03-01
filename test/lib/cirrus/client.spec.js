@@ -29,11 +29,15 @@ describe('cirrusClient', function(){
             this.authUrl = 'blah';
             this.logger = { info: function(){}, debug: function(){} };
 
-            this.cirrusClient = builder({
-                request: this.request,
-                authUrl: this.authUrl,
-                logger: this.logger
-            });
+            this.inject = function(depName) {
+                return {
+                    request: this.request,
+                    authUrl: this.authUrl,
+                    logger: this.logger
+                }[depName];
+            }.bind(this);
+
+            this.cirrusClient = builder(this.inject);
         };
     });
 
