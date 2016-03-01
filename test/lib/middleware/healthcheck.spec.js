@@ -6,26 +6,30 @@ var assert = require('assert'),
 var mongoHealthy = true,
     cirrusHealthy = true;
 
-var healthcheck = require('../../../lib/middleware/healthcheck')({
-    databaseClient: {
-        isHealthy: function(){
-            var deferred = Q.defer();
-            deferred.resolve({
-                healthy: mongoHealthy
-            });
-            return deferred.promise;
+var inject = function(depName){
+    return {
+        databaseClient: {
+            isHealthy: function(){
+                var deferred = Q.defer();
+                deferred.resolve({
+                    healthy: mongoHealthy
+                });
+                return deferred.promise;
+            }
+        },
+        cirrusClient: {
+            isHealthy: function(){
+                var deferred = Q.defer();
+                deferred.resolve({
+                    healthy: cirrusHealthy
+                });
+                return deferred.promise;
+            }
         }
-    },
-    cirrusClient: {
-        isHealthy: function(){
-            var deferred = Q.defer();
-            deferred.resolve({
-                healthy: cirrusHealthy
-            });
-            return deferred.promise;
-        }
-    }
-});
+    }[depName]
+}
+
+var healthcheck = require('../../../lib/middleware/healthcheck')(inject);
 
 describe('Healthcheck', function() {
     describe('default', function() {

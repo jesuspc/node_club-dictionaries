@@ -4,30 +4,33 @@ var assert = require('assert'),
 
 var dbClientOK = true;
 
-
-var dbClient = require('../../lib/persistence/dbClient')({
-    client: {
-        connect: function(){
-            var deferConnect = Q.defer();
-            if (dbClientOK) {
-                deferConnect.resolve({
-                    admin: function () {
-                        return {
-                            ping: function () {
-                                var deferPing = Q.defer();
-                                deferPing.resolve({});
-                                return deferPing.promise;
-                            }
-                        };
-                    }
-                });
-            } else {
-                deferConnect.reject('some-error');
+var inject = function(depName) {
+    return {
+        mongoClient: {
+            connect: function(){
+                var deferConnect = Q.defer();
+                if (dbClientOK) {
+                    deferConnect.resolve({
+                        admin: function () {
+                            return {
+                                ping: function () {
+                                    var deferPing = Q.defer();
+                                    deferPing.resolve({});
+                                    return deferPing.promise;
+                                }
+                            };
+                        }
+                    });
+                } else {
+                    deferConnect.reject('some-error');
+                }
+                return deferConnect.promise;
             }
-            return deferConnect.promise;
         }
-    }
-});
+    }[depName];
+};
+
+var dbClient = require('../../lib/persistence/dbClient')(inject);
 
 describe('dbClient', function() {
     describe('healthcheck', function() {

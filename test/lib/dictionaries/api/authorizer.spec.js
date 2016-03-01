@@ -12,7 +12,7 @@ describe('Authorizer', function(){
         this.next = sinon.spy();
 
         this.getSubject = function(){
-            return require('../../../lib/middleware/authorizer')({
+            return require('../../../../lib/dictionaries/api/authorizer')({
                 conditions: this.conditions
             });
         };

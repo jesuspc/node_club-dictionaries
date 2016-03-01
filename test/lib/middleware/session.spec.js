@@ -39,10 +39,12 @@ describe('Session', function(){
             };
 
             this.logger = { info: function(){}, debug: function(){} };
-            this.session = session({
-                authenticator: this.authenticator,
-                logger: this.logger
-            });
+            this.session = session(function(depName){
+                return {
+                    cirrusClient: this.authenticator,
+                    loggerTool: this.logger
+                }[depName];
+            }.bind(this));
         };
     });
 

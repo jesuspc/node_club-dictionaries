@@ -2,6 +2,8 @@ module.exports = function() {
   var defined = {};
   var memoized = {};
 
+  var delimiter = '.';
+
   var set = function(name, generator){
     defined[name] = generator;
   };
@@ -18,10 +20,37 @@ module.exports = function() {
     }
   };
 
+  var fetcher = function(context) {
+    return function(dependencyName) {
+      var atThislevel = Object.keys(defined).filter(function(prop) {
+        return prop.startsWith(context);
+      }).filter(function(prop){
+        if(!!context) {
+          return prop === context + delimiter + dependencyName;
+        } else {
+          return prop === dependencyName;
+        }
+      })[0];
+
+      if(atThislevel || context === '') {
+        if(atThislevel) {
+          returnValue = get(atThislevel);
+        } else {
+          returnValue = undefined;
+        }
+      } else {
+        newContext = context.split(delimiter).slice(0, -1).join(delimiter);
+        fetcher(newContext)(dependencyName);
+      }
+
+      return returnValue;
+    }
+  };
+
   var box = function(){
     var accum = {};
     var splitted, serveFunction;
-    var delimiter = '.';
+
     var expandTree = function(prop){
       splitted = prop.split(delimiter);
 
@@ -49,5 +78,5 @@ module.exports = function() {
     }
   };
 
-  return { set: set, get: get, box: box };
+  return { set: set, get: get, box: box, fetcher: fetcher };
 };
