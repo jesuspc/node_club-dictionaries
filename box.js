@@ -1,10 +1,11 @@
-module.exports = function(boxer, overrides) {
+module.exports = function(boxer, opts) {
   var box;
+  var opts = opts || {};
 
-  require('./lib/middleware/box')(boxer);
-  require('./lib/persistence/box')(boxer);
-  require('./lib/cirrus/box')(boxer);
-  require('./lib/dictionaries/box')(boxer);
+  boxer.enbox('./lib/middleware');
+  boxer.enbox('./lib/persistence');
+  boxer.enbox('./lib/cirrus');
+  boxer.enbox('./lib/dictionaries');
 
   boxer.set('config', function(){
     var fs = require('fs');
@@ -62,7 +63,7 @@ module.exports = function(boxer, overrides) {
     return app;
   });
 
-  if(overrides) overrides(boxer);
+  if(opts.overrides) opts.overrides(boxer);
 
   box = boxer.box();
 

@@ -4,6 +4,31 @@ module.exports = function() {
 
   var delimiter = '.';
 
+  var prefixed = function(prefix) {
+    return {
+      set: function(name, generator) {
+        return set([prefix, name].join(delimiter), generator);
+      },
+
+      get: function(name) {
+        return get([prefix, name].join(delimiter));
+      },
+
+      fetcher: function(context) {
+        return fetcher([prefix, context].join(delimiter));
+      },
+
+      box: function() { return box },
+
+      enbox: function(folderPath) {
+        return enbox(folderPath);
+      },
+
+      root: root
+    }
+  };
+
+
   var set = function(name, generator){
     defined[name] = generator;
   };
@@ -47,6 +72,14 @@ module.exports = function() {
     }
   };
 
+  var enbox = function(folderPath) {
+    var boxPath = folderPath + '/box';
+    var splittedFolderPath = folderPath.split('/');
+    var namespace = splittedFolderPath[splittedFolderPath.length - 1];
+
+    require(boxPath)(prefixed(namespace));
+  };
+
   var box = function(){
     var accum = {};
     var splitted, serveFunction;
@@ -78,5 +111,9 @@ module.exports = function() {
     }
   };
 
-  return { set: set, get: get, box: box, fetcher: fetcher };
+  var root = fetcher('');
+
+  var self = { set: set, get: get, box: box, fetcher: fetcher, enbox: enbox };
+
+  return self;
 };
