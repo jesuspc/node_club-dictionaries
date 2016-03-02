@@ -33,8 +33,30 @@ module.exports = function() {
 
       getMainBoxFolder: mainBoxFolder + '/' + prefix.split(delimiter).join('/'),
 
-      root: root
+      root: root,
+
+      autoloadInner: function(folderPath) {
+        var folderPath = mainBoxFolder + '/' + prefix.split(delimiter).join('/');
+
+        autoloadInner(folderPath);
+      }
     }
+  };
+
+  var autoloadInner = function(folderPath) {
+    var folderPath = folderPath || mainBoxFolder;
+    var fs = require('fs');
+
+    fs.readdirSync(folderPath).filter(function(fileOrFolderPath){
+      return fs.lstatSync(folderPath + '/' + fileOrFolderPath).isFile();
+    }).filter(function(fileName) {
+      return !fileName.endsWith('box.js');
+    }).map(function(fileName){
+      var fileName = fileName.split('.')[0]
+      var relativePath = folderPath.replace(mainBoxFolder, '') + '/' + fileName;
+      var namespace = relativePath.slice(1).split('/').join(delimiter);
+      set(namespace);
+    });
   };
 
   var set = function(name, generator){
