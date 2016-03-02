@@ -1,7 +1,7 @@
 module.exports = function() {
   var defined = {};
   var memoized = {};
-  var mainBoxFolder = undefined;
+  var mainBoxFolder;
 
   var delimiter = '.';
 
@@ -18,7 +18,7 @@ module.exports = function() {
   };
 
   var pathToNamespace = function(path) {
-    return path.split('/').filter(function(e){ return e }).join(delimiter);
+    return path.split('/').filter(function(e){ return e; }).join(delimiter);
   };
 
   var globPathToNamespace = function(path) {
@@ -51,7 +51,9 @@ module.exports = function() {
         return _fetcher()(dependencyName);
       },
 
-      box: function() { return box },
+      fetcher: _fetcher,
+
+      box: function() { return box; },
 
       enbox: function(folderPath) {
         return enbox(dSplit(prefix).join('/') + '/' + folderPath);
@@ -62,28 +64,29 @@ module.exports = function() {
       autoloadInner: function(folderPath) {
         autoloadInner(namespaceToGlobPath(prefix));
       }
-    }
+    };
   };
 
   var autoloadInner = function(folderPath) {
-    var folderPath = folderPath || mainBoxFolder;
     var fs = require('fs');
+    folderPath = folderPath || mainBoxFolder;
 
     fs.readdirSync(folderPath).filter(function(fileOrFolderPath){
       return fs.lstatSync(folderPath + '/' + fileOrFolderPath).isFile();
     }).filter(function(fileName) {
       return !fileName.endsWith('box.js');
     }).map(function(fileName){
-      var fileNameWithoutExtension = fileName.split('.')[0];
-      var namespace = [globPathToNamespace(folderPath), fileNameWithoutExtension].join('.');
+      var fileNameWoExtension = fileName.split('.')[0];
+      var namespace = [globPathToNamespace(folderPath), fileNameWoExtension]
+        .filter(function(e){ return e; }).join('.');
       set(namespace);
     });
   };
 
   var set = function(namespace, generator){
-    var generator = generator || function() {
+    generator = generator || function() {
       return require(namespaceToGlobPath(namespace))(fetcher(namespace));
-    }
+    };
 
     defined[namespace] = generator;
   };
@@ -124,7 +127,7 @@ module.exports = function() {
       }
 
       return returnValue;
-    }
+    };
   };
 
   var fetch = function(dependencyName) {
@@ -176,7 +179,9 @@ module.exports = function() {
 
   var root = fetcher('');
 
-  var self = { set: set, get: get, box: box, enbox: enbox, setMainBoxFolder: setMainBoxFolder, fetch: fetch };
-
-  return self;
+  return {
+    set: set, get: get, box: box, enbox: enbox,
+    setMainBoxFolder: setMainBoxFolder, fetch: fetch, fetcher: fetcher,
+    autoloadInner: autoloadInner
+  };
 };

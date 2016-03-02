@@ -26,8 +26,8 @@ var inject = function(depName){
                 return deferred.promise;
             }
         }
-    }[depName]
-}
+    }[depName];
+};
 
 var healthcheck = require('../../../lib/middleware/healthcheck')(inject);
 
