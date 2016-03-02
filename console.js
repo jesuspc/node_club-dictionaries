@@ -1,6 +1,6 @@
 var repl = require("repl");
 var boxer = require('./boxer')();
-var box = require('./box')(boxer);
+var box = require('./lib/box')(boxer);
 
 console.log('>>> Welcome to the Dictionaries microservice Repl.');
 console.log('>>> The box object is available from here.');

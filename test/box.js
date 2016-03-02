@@ -1,6 +1,6 @@
 module.exports = function(){
   var boxer = require('../boxer')();
-  var box = require('../box')(boxer, { overrides: function(overrides){
+  var box = require('../lib/box')(boxer, { overrides: function(overrides){
     overrides.set('persistence.database', function(){
       return 'dictionaries_test';
     });

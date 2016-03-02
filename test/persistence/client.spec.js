@@ -30,7 +30,7 @@ var inject = function(depName) {
     }[depName];
 };
 
-var dbClient = require('../../lib/persistence/dbClient')(inject);
+var dbClient = require('../../lib/persistence/client')(inject);
 
 describe('dbClient', function() {
     describe('healthcheck', function() {

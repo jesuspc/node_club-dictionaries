@@ -1,10 +1,15 @@
 module.exports = function() {
   var defined = {};
   var memoized = {};
+  var mainBoxFolder = undefined;
 
   var delimiter = '.';
 
   var prefixed = function(prefix) {
+    var _fetcher = function(context) {
+      return fetcher([prefix, context].join(delimiter));
+    };
+
     return {
       set: function(name, generator) {
         return set([prefix, name].join(delimiter), generator);
@@ -14,22 +19,30 @@ module.exports = function() {
         return get([prefix, name].join(delimiter));
       },
 
-      fetcher: function(context) {
-        return fetcher([prefix, context].join(delimiter));
+      fetcher: _fetcher,
+
+      fetch: function(dependencyName) {
+        return _fetcher()(dependencyName);
       },
 
       box: function() { return box },
 
       enbox: function(folderPath) {
-        return enbox(folderPath);
+        return enbox(prefix.split(delimiter).join('/') + '/' + folderPath);
       },
+
+      getMainBoxFolder: mainBoxFolder + '/' + prefix.split(delimiter).join('/'),
 
       root: root
     }
   };
 
-
   var set = function(name, generator){
+    var generator = generator || function() {
+      var nameSplits = name.split(delimiter);
+      return require(mainBoxFolder + '/' + nameSplits.join('/'))(self.fetcher(nameSplits.slice(0, -1).join(delimiter)));
+    }
+
     defined[name] = generator;
   };
 
@@ -72,10 +85,14 @@ module.exports = function() {
     }
   };
 
+  var fetch = function(dependencyName) {
+    return fetcher()(dependencyName);
+  };
+
   var enbox = function(folderPath) {
-    var boxPath = folderPath + '/box';
+    var boxPath = mainBoxFolder + '/' + folderPath + '/box';
     var splittedFolderPath = folderPath.split('/');
-    var namespace = splittedFolderPath[splittedFolderPath.length - 1];
+    var namespace = splittedFolderPath.join(delimiter);
 
     require(boxPath)(prefixed(namespace));
   };
@@ -111,9 +128,13 @@ module.exports = function() {
     }
   };
 
+  var setMainBoxFolder = function(path) {
+    mainBoxFolder = path;
+  };
+
   var root = fetcher('');
 
-  var self = { set: set, get: get, box: box, fetcher: fetcher, enbox: enbox };
+  var self = { set: set, get: get, box: box, fetcher: fetcher, enbox: enbox, setMainBoxFolder: setMainBoxFolder, getMainBoxFolder: mainBoxFolder, fetch: fetch };
 
   return self;
 };
