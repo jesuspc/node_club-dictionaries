@@ -5,21 +5,47 @@ module.exports = function() {
 
   var delimiter = '.';
 
+  var dMerge = function(head, tail) {
+    return [head, tail].join(delimiter);
+  };
+
+  var dSplit = function(namespace) {
+    return namespace.split(delimiter);
+  };
+
+  var dJoin = function(collection) {
+    return collection.join(delimiter);
+  };
+
+  var pathToNamespace = function(path) {
+    return path.split('/').filter(function(e){ return e }).join(delimiter);
+  };
+
+  var globPathToNamespace = function(path) {
+    return pathToNamespace(path.replace(mainBoxFolder, ''));
+  };
+
+  var namespaceToPath = function(namespace) {
+    return dSplit(namespace).join('/');
+  };
+
+  var namespaceToGlobPath = function(namespace) {
+    return mainBoxFolder + '/' + namespaceToPath(namespace);
+  };
+
   var prefixed = function(prefix) {
     var _fetcher = function(context) {
-      return fetcher([prefix, context].join(delimiter));
+      return fetcher(dMerge(prefix, context));
     };
 
     return {
       set: function(name, generator) {
-        return set([prefix, name].join(delimiter), generator);
+        return set(dMerge(prefix, name), generator);
       },
 
       get: function(name) {
-        return get([prefix, name].join(delimiter));
+        return get(dMerge(prefix, name));
       },
-
-      fetcher: _fetcher,
 
       fetch: function(dependencyName) {
         return _fetcher()(dependencyName);
@@ -28,17 +54,13 @@ module.exports = function() {
       box: function() { return box },
 
       enbox: function(folderPath) {
-        return enbox(prefix.split(delimiter).join('/') + '/' + folderPath);
+        return enbox(dSplit(prefix).join('/') + '/' + folderPath);
       },
-
-      getMainBoxFolder: mainBoxFolder + '/' + prefix.split(delimiter).join('/'),
 
       root: root,
 
       autoloadInner: function(folderPath) {
-        var folderPath = mainBoxFolder + '/' + prefix.split(delimiter).join('/');
-
-        autoloadInner(folderPath);
+        autoloadInner(namespaceToGlobPath(prefix));
       }
     }
   };
@@ -52,20 +74,18 @@ module.exports = function() {
     }).filter(function(fileName) {
       return !fileName.endsWith('box.js');
     }).map(function(fileName){
-      var fileName = fileName.split('.')[0]
-      var relativePath = folderPath.replace(mainBoxFolder, '') + '/' + fileName;
-      var namespace = relativePath.slice(1).split('/').join(delimiter);
+      var fileNameWithoutExtension = fileName.split('.')[0];
+      var namespace = [globPathToNamespace(folderPath), fileNameWithoutExtension].join('.');
       set(namespace);
     });
   };
 
-  var set = function(name, generator){
+  var set = function(namespace, generator){
     var generator = generator || function() {
-      var nameSplits = name.split(delimiter);
-      return require(mainBoxFolder + '/' + nameSplits.join('/'))(self.fetcher(nameSplits.slice(0, -1).join(delimiter)));
+      return require(namespaceToGlobPath(namespace))(fetcher(namespace));
     }
 
-    defined[name] = generator;
+    defined[namespace] = generator;
   };
 
   var get = function(name) {
@@ -99,7 +119,7 @@ module.exports = function() {
           returnValue = undefined;
         }
       } else {
-        newContext = context.split(delimiter).slice(0, -1).join(delimiter);
+        newContext = dJoin(dSplit(context).slice(0, -1));
         fetcher(newContext)(dependencyName);
       }
 
@@ -114,7 +134,7 @@ module.exports = function() {
   var enbox = function(folderPath) {
     var boxPath = mainBoxFolder + '/' + folderPath + '/box';
     var splittedFolderPath = folderPath.split('/');
-    var namespace = splittedFolderPath.join(delimiter);
+    var namespace = dJoin(splittedFolderPath);
 
     require(boxPath)(prefixed(namespace));
   };
@@ -156,7 +176,7 @@ module.exports = function() {
 
   var root = fetcher('');
 
-  var self = { set: set, get: get, box: box, fetcher: fetcher, enbox: enbox, setMainBoxFolder: setMainBoxFolder, getMainBoxFolder: mainBoxFolder, fetch: fetch };
+  var self = { set: set, get: get, box: box, enbox: enbox, setMainBoxFolder: setMainBoxFolder, fetch: fetch };
 
   return self;
 };
