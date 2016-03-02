@@ -24,10 +24,39 @@ module.exports = function() {
         return enbox(folderPath);
       },
 
+      autoloadInner: function(folderPath) {
+        console.log(folderPath)
+        return autoloadInner(folderPath);
+      },
+
+      setFromFile: function(filePath) {
+        return setFromFile(filePath);
+      },
+
       root: root
     }
   };
 
+  var autoloadInner = function(folderPath, prefix) {
+    var fs = require('fs');
+
+    fs.readdirSync(folderPath).filter(function(fileOrFolderPath){
+      return fs.lstatSync(folderPath + '/' + fileOrFolderPath).isFile();
+    }).filter(function(fileName) {
+      return !fileName.endsWith('box.js');
+    }).map(function(fileName){
+      setFromFile(folderPath + '/' + fileName, fileName);
+    });
+  };
+
+  var setFromFile = function(filePath, name, prefix) {
+    var prefix = prefix || ''
+    console.log('Setting from File: ' + filePath + ' as ' + name);
+    self.set(name, function(){
+      //Careful with fetcher!
+      return require(filePath)(self.fetcher());
+    });
+  };
 
   var set = function(name, generator){
     defined[name] = generator;
