@@ -1,11 +1,10 @@
 var repl = require("repl");
-var boxer = require('./boxer')();
-var box = require('./lib/box')(boxer);
+var modules = require('./lib/boxer').modules();
 
 console.log('>>> Welcome to the Dictionaries microservice Repl.');
-console.log('>>> The box object is available from here.');
+console.log('>>> The modules object is available from here.');
 r = repl.start("tokens> ");
-r.context.box = box;
+r.context.modules = modules;
 r.context.$ = function(inspectable) {
   console.log('' + inspectable);
 };

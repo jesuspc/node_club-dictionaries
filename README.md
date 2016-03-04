@@ -88,3 +88,9 @@ Also a fake ssl certificate has to be set up in the public directory that would 
 the one that is expected to be present in production.
 
 Access the API using that host instead and ignore the warning about security.
+
+### TODO
+
+* [] Lifecycle
+  * autoloadInner require lifecycle as argument
+  * lifecycle method to set with a particular lifecycle
