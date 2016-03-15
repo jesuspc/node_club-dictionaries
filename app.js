@@ -1,4 +1,2 @@
-var boxer = require('./boxer')();
-var box = require('./lib/box')(boxer);
+require('./lib/boxer/boxer2')(__dirname).autobind('foo', { as: 'bar' });
 
-module.exports = box.app();
