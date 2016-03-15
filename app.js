@@ -1,1 +1,2 @@
-module.exports = require('./lib/boxer').fetch('app');
+require('./lib/boxer/boxer2')(__dirname).autobind('foo', { as: 'bar' });
+

@@ -1,4 +1,4 @@
 var boxer = require('./boxer')();
-boxer.enbox('lib').as('.');
+boxer.autobind('lib').as('.');
 
 module.exports = boxer;
